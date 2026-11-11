@@ -2,6 +2,8 @@
 
 # ioBroker.goe-wallbox
 
+**English** · [Deutsch](docs/de/README.md)
+
 Lean device mirror for **go-e Charger** wallboxes.
 
 The adapter exposes the values of the official local HTTP API v2 as ioBroker states – readable and, where the API
