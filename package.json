@@ -5,7 +5,7 @@
     "author": {
         "name": "ben"
     },
-    "homepage": "https://github.com/GITHUB_USER/ioBroker.goe-wallbox",
+    "homepage": "https://github.com/BenZ-ITS/ioBroker.goe-wallbox",
     "license": "MIT",
     "keywords": [
         "ioBroker",
@@ -17,10 +17,10 @@
     ],
     "repository": {
         "type": "git",
-        "url": "git+https://github.com/GITHUB_USER/ioBroker.goe-wallbox.git"
+        "url": "git+https://github.com/BenZ-ITS/ioBroker.goe-wallbox.git"
     },
     "bugs": {
-        "url": "https://github.com/GITHUB_USER/ioBroker.goe-wallbox/issues"
+        "url": "https://github.com/BenZ-ITS/ioBroker.goe-wallbox/issues"
     },
     "engines": {
         "node": ">=22"
