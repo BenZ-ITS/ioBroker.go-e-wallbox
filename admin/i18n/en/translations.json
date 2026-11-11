@@ -1,0 +1,15 @@
+{
+    "apiHint": "The local HTTP API v2 has to be enabled in the go-e app for every wallbox.",
+    "chargers": "Wallboxes",
+    "enabled": "Active",
+    "name": "Name (optional)",
+    "host": "IP address or host name",
+    "pollInterval": "Poll interval",
+    "pollIntervalHelp": "Seconds between two status requests",
+    "requestTimeout": "Request timeout",
+    "requestTimeoutHelp": "Seconds until a request is considered failed",
+    "readOnly": "Read-only mode",
+    "readOnlyHelp": "The adapter never sends anything to the wallboxes; written states are reset",
+    "extraKeys": "Additional API keys",
+    "extraKeysHelp": "Comma-separated keys from the go-e API documentation, shown unprocessed below \"raw\""
+}

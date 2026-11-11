@@ -1,0 +1,14 @@
+{
+    "extends": "@tsconfig/node22/tsconfig.json",
+    "compilerOptions": {
+        "noEmit": true,
+        "strict": true,
+        "noImplicitOverride": true,
+        "noUnusedLocals": true,
+        "noUnusedParameters": true,
+        "resolveJsonModule": true,
+        "sourceMap": true,
+        "types": ["node", "mocha", "@iobroker/types"]
+    },
+    "include": ["src/**/*.ts"]
+}

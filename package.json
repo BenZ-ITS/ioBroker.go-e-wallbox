@@ -1,0 +1,61 @@
+{
+    "name": "iobroker.goe-wallbox",
+    "version": "0.1.0",
+    "description": "Lean device mirror for go-e Charger wallboxes: all relevant values of the official local HTTP API v2 as ioBroker states, readable and writable, without built-in charging logic",
+    "author": {
+        "name": "ben"
+    },
+    "homepage": "https://github.com/GITHUB_USER/ioBroker.goe-wallbox",
+    "license": "MIT",
+    "keywords": [
+        "ioBroker",
+        "go-e",
+        "go-eCharger",
+        "wallbox",
+        "ev charger",
+        "energy"
+    ],
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/GITHUB_USER/ioBroker.goe-wallbox.git"
+    },
+    "bugs": {
+        "url": "https://github.com/GITHUB_USER/ioBroker.goe-wallbox/issues"
+    },
+    "engines": {
+        "node": ">=22"
+    },
+    "main": "build/main.js",
+    "files": [
+        "admin/",
+        "build/",
+        "!build/**/*.test.js",
+        "!build/**/*.map",
+        "io-package.json",
+        "LICENSE"
+    ],
+    "scripts": {
+        "prebuild": "node -e \"require('node:fs').rmSync('build',{recursive:true,force:true})\"",
+        "build": "tsc -p tsconfig.build.json",
+        "watch": "tsc -p tsconfig.build.json --watch",
+        "check": "tsc --noEmit",
+        "lint": "eslint -c eslint.config.mjs .",
+        "test:unit": "npm run build && mocha \"build/**/*.test.js\"",
+        "test:package": "mocha test/package.js --exit",
+        "test:integration": "npm run build && mocha test/integration.js --exit",
+        "test": "npm run test:unit && npm run test:package"
+    },
+    "dependencies": {
+        "@iobroker/adapter-core": "^3.4.3"
+    },
+    "devDependencies": {
+        "@iobroker/eslint-config": "^2.3.4",
+        "@iobroker/testing": "^6.3.2",
+        "@iobroker/types": "^7.2.5",
+        "@tsconfig/node22": "^22.0.6",
+        "@types/mocha": "^10.0.10",
+        "@types/node": "^22.19.0",
+        "mocha": "^11.7.5",
+        "typescript": "~5.9.3"
+    }
+}

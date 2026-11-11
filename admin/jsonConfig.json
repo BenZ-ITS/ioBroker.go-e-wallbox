@@ -1,0 +1,96 @@
+{
+    "i18n": true,
+    "type": "panel",
+    "items": {
+        "_apiHint": {
+            "type": "staticText",
+            "text": "apiHint",
+            "newLine": true,
+            "xs": 12,
+            "sm": 12,
+            "md": 12,
+            "lg": 12,
+            "xl": 12
+        },
+        "chargers": {
+            "type": "table",
+            "label": "chargers",
+            "newLine": true,
+            "xs": 12,
+            "sm": 12,
+            "md": 12,
+            "lg": 12,
+            "xl": 12,
+            "items": [
+                {
+                    "type": "checkbox",
+                    "attr": "enabled",
+                    "title": "enabled",
+                    "width": "10%",
+                    "default": true
+                },
+                {
+                    "type": "text",
+                    "attr": "name",
+                    "title": "name",
+                    "width": "40%",
+                    "default": ""
+                },
+                {
+                    "type": "text",
+                    "attr": "host",
+                    "title": "host",
+                    "width": "50%",
+                    "default": ""
+                }
+            ]
+        },
+        "pollInterval": {
+            "type": "number",
+            "label": "pollInterval",
+            "help": "pollIntervalHelp",
+            "min": 1,
+            "max": 3600,
+            "newLine": true,
+            "xs": 12,
+            "sm": 12,
+            "md": 6,
+            "lg": 4,
+            "xl": 4
+        },
+        "requestTimeout": {
+            "type": "number",
+            "label": "requestTimeout",
+            "help": "requestTimeoutHelp",
+            "min": 1,
+            "max": 30,
+            "xs": 12,
+            "sm": 12,
+            "md": 6,
+            "lg": 4,
+            "xl": 4
+        },
+        "readOnly": {
+            "type": "checkbox",
+            "label": "readOnly",
+            "help": "readOnlyHelp",
+            "newLine": true,
+            "xs": 12,
+            "sm": 12,
+            "md": 12,
+            "lg": 8,
+            "xl": 8
+        },
+        "extraKeys": {
+            "type": "text",
+            "label": "extraKeys",
+            "help": "extraKeysHelp",
+            "newLine": true,
+            "xs": 12,
+            "sm": 12,
+            "md": 12,
+            "lg": 8,
+            "xl": 8
+        }
+    }
+}

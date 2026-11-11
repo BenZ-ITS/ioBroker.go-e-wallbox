@@ -1,0 +1,88 @@
+{
+    "common": {
+        "name": "goe-wallbox",
+        "version": "0.1.0",
+        "news": {
+            "0.1.0": {
+                "en": "Initial release: local HTTP API v2, multiple wallboxes, read and write access, read-only mode",
+                "de": "Erste Version: lokale HTTP-API v2, mehrere Wallboxen, Lese- und Schreibzugriff, Nur-Lesen-Modus"
+            }
+        },
+        "titleLang": {
+            "en": "go-e Charger Wallbox (API mirror)",
+            "de": "go-e Charger Wallbox (API-Spiegel)"
+        },
+        "desc": {
+            "en": "Lean device mirror for go-e Charger wallboxes: all relevant values of the official local HTTP API v2 as states, readable and writable, without built-in charging logic",
+            "de": "Schlanker Geräte-Spiegel für go-e Charger Wallboxen: alle wichtigen Werte der offiziellen lokalen HTTP-API v2 als Datenpunkte, lesend und schreibend, ohne eingebaute Ladelogik"
+        },
+        "authors": ["ben"],
+        "keywords": ["go-e", "go-eCharger", "wallbox", "ev charger", "energy"],
+        "licenseInformation": {
+            "type": "free",
+            "license": "MIT"
+        },
+        "platform": "Javascript/Node.js",
+        "icon": "goe-wallbox.png",
+        "enabled": true,
+        "extIcon": "https://raw.githubusercontent.com/GITHUB_USER/ioBroker.goe-wallbox/main/admin/goe-wallbox.png",
+        "readme": "https://github.com/GITHUB_USER/ioBroker.goe-wallbox/blob/main/README.md",
+        "loglevel": "info",
+        "tier": 2,
+        "mode": "daemon",
+        "type": "energy",
+        "compact": true,
+        "connectionType": "local",
+        "dataSource": "poll",
+        "adminUI": {
+            "config": "json"
+        },
+        "dependencies": [
+            {
+                "js-controller": ">=6.0.11"
+            }
+        ],
+        "globalDependencies": [
+            {
+                "admin": ">=7.6.17"
+            }
+        ]
+    },
+    "native": {
+        "chargers": [],
+        "pollInterval": 5,
+        "requestTimeout": 4,
+        "readOnly": false,
+        "extraKeys": ""
+    },
+    "objects": [],
+    "instanceObjects": [
+        {
+            "_id": "info",
+            "type": "channel",
+            "common": {
+                "name": {
+                    "en": "Information",
+                    "de": "Information"
+                }
+            },
+            "native": {}
+        },
+        {
+            "_id": "info.connection",
+            "type": "state",
+            "common": {
+                "role": "indicator.connected",
+                "name": {
+                    "en": "At least one wallbox is reachable",
+                    "de": "Mindestens eine Wallbox ist erreichbar"
+                },
+                "type": "boolean",
+                "read": true,
+                "write": false,
+                "def": false
+            },
+            "native": {}
+        }
+    ]
+}
