@@ -33,7 +33,10 @@ jobs:
         strategy:
             matrix:
                 node-version: [22.x, 24.x]
-                os: [ubuntu-latest, windows-latest, macos-latest]
+                # While the repository is private only Linux is tested: Windows and macOS runners
+                # count 2x and 10x against the free Actions minutes. Before publishing switch back to
+                # [ubuntu-latest, windows-latest, macos-latest] – public repositories are free.
+                os: [ubuntu-latest]
         steps:
             - uses: actions/checkout@v4
             - uses: actions/setup-node@v4
