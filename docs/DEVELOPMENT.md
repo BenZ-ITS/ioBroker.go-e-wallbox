@@ -76,13 +76,40 @@ For a release:
 
 1. Raise the version in `package.json` and `io-package.json` (`common.version`) and add an entry to `common.news`
    and to the changelog in `README.md`.
-2. Run all checks including the integration test.
-3. Commit, tag `v<version>`, push both: `git push origin main v<version>`.
+2. Write the release notes in `docs/release-notes/<version>.md` (see below).
+3. Run all checks including the integration test.
+4. Commit, tag `v<version>`, push both: `git push origin main v<version>`.
 
 The workflow then runs all tests for the tag and creates the GitHub release itself: it checks that the tag,
-`package.json` and `io-package.json` carry the same version, attaches the `.tgz` from `npm pack` and takes the
-release notes from `common.news` (English and German). For a tag that was pushed without a release, start the
-workflow by hand under **Actions → Test → Run workflow** and enter the tag.
+`package.json` and `io-package.json` carry the same version and that the release notes exist, attaches the `.tgz`
+from `npm pack` and uses the release notes as the text of the release. Without release notes no release is created.
+For a tag that was pushed without a release, start the workflow by hand under **Actions → Test → Run workflow** and
+enter the tag.
+
+### Release notes
+
+Every version gets a file `docs/release-notes/<version>.md` with an English and a German part. Each part answers
+three questions: what changed, what it means for users (states, settings, scripts, anything to do after the update)
+and why the change was made. The short entry in `common.news` is what the admin interface shows; the release notes
+are the full description.
+
+```markdown
+## English
+
+### What changed
+
+### Impact
+
+### Why
+
+## Deutsch
+
+### Was sich geändert hat
+
+### Auswirkungen
+
+### Hintergrund
+```
 
 Publishing to npm and an entry in the ioBroker adapter repository are not set up yet. Both require the repository to
 be public; see the ioBroker developer documentation for the current requirements (adapter checker, test matrix,
