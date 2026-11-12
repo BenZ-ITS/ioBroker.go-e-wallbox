@@ -103,6 +103,18 @@ describe('datapoints', () => {
         assert.equal(datapoint('info.friendlyName').write!.toApi('  Garage '), 'Garage');
     });
 
+    it('count the phases switched to the car', () => {
+        const phases = datapoint('energy.phases');
+        assert.deepEqual(phases.keys, ['pha']);
+        assert.equal(phases.read({ pha: [true, true, true, true, true, true], pnp: 0 }), 3);
+        assert.equal(phases.read({ pha: [true, false, false, true, true, true], pnp: 0 }), 1);
+        assert.equal(phases.read({ pha: [false, false, false, true, true, true], pnp: 0 }), 0);
+        assert.equal(phases.read({ pha: null }), null);
+        assert.equal(phases.read({ pha: [true, true] }), null);
+        assert.equal(phases.read({ pha: [1, 1, 1, 1, 1, 1] }), null);
+        assert.equal(phases.read({ pnp: 3 }), undefined);
+    });
+
     it('offer no write access for measurements', () => {
         for (const id of ['charging.allowed', 'charging.reason', 'energy.total', 'car.state']) {
             assert.equal(datapoint(id).write, undefined);

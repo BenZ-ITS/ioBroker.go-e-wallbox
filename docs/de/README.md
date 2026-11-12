@@ -145,7 +145,7 @@ Ein Datenpunkt wird nur angelegt, wenn die Firmware den zugehörigen Schlüssel 
 | `energy.currentL1…L3`        | `nrg`         |            | Strom in A                                                                      |
 | `energy.total`               | `eto`         |            | Gesamtenergie in Wh                                                             |
 | `energy.frequency`           | `fhz`         |            | Netzfrequenz in Hz                                                              |
-| `energy.phases`              | `pnp`         |            | Anzahl genutzter Phasen                                                         |
+| `energy.phases`              | `pha`         |            | Anzahl zum Fahrzeug geschalteter Phasen (0 = Schütz offen)                      |
 | `temperature.sensor1/2`      | `tma`         |            | Temperaturen in °C                                                              |
 | `pv.useSurplus`              | `fup`         |     ✔      | PV-Überschussfunktion der Wallbox ein/aus                                       |
 | `pv.startingPower`           | `fst`         |     ✔      | Startleistung für das Überschussladen in W                                      |

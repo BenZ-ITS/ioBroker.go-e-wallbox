@@ -195,6 +195,29 @@ function elementOf(key: string, index: number, digits: number): Datapoint['read'
     };
 }
 
+/**
+ * Counts the phases switched to the car.
+ *
+ * `pha` holds six booleans: L1–L3 towards the car (behind the contactor), then L1–L3 at the supply.
+ * The key `pnp` is not used: measured on firmware 60.5, it stays 0 while charging on one or three phases.
+ */
+function switchedPhases(): Datapoint['read'] {
+    return status => {
+        if (!('pha' in status)) {
+            return undefined;
+        }
+        const list = status.pha;
+        if (!Array.isArray(list) || list.length < 3) {
+            return null;
+        }
+        const towardsCar: unknown[] = list.slice(0, 3);
+        if (!towardsCar.every(value => typeof value === 'boolean')) {
+            return null;
+        }
+        return towardsCar.filter(Boolean).length;
+    };
+}
+
 interface NumberRule {
     min?: number;
     max?: number;
@@ -568,11 +591,13 @@ export const DATAPOINTS: readonly Datapoint[] = [
     },
     {
         id: 'energy.phases',
-        keys: ['pnp'],
-        name: { en: 'Number of phases in use', de: 'Anzahl genutzter Phasen' },
+        keys: ['pha'],
+        name: { en: 'Number of phases switched to the car', de: 'Anzahl zum Fahrzeug geschalteter Phasen' },
         type: 'number',
         role: 'value',
-        read: numberOf('pnp'),
+        min: 0,
+        max: 3,
+        read: switchedPhases(),
     },
 
     // temperature

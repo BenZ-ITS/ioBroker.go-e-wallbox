@@ -144,7 +144,7 @@ A state is only created if the firmware actually delivers the underlying key.
 | `energy.currentL1…L3`        | `nrg`         |       | Current in A                                                               |
 | `energy.total`               | `eto`         |       | Total energy in Wh                                                         |
 | `energy.frequency`           | `fhz`         |       | Grid frequency in Hz                                                       |
-| `energy.phases`              | `pnp`         |       | Number of phases in use                                                    |
+| `energy.phases`              | `pha`         |       | Number of phases switched to the car (0 = contactor open)                  |
 | `temperature.sensor1/2`      | `tma`         |       | Temperatures in °C                                                         |
 | `pv.useSurplus`              | `fup`         |   ✔   | PV surplus function of the wallbox on/off                                  |
 | `pv.startingPower`           | `fst`         |   ✔   | Starting power for surplus charging in W                                   |
@@ -179,6 +179,10 @@ npm run test:integration   # starts the adapter in a real js-controller
 Architecture, conventions and the release procedure are described in [docs/DEVELOPMENT.md](docs/DEVELOPMENT.md).
 
 ## Changelog
+
+### **WORK IN PROGRESS**
+
+- Fix: `energy.phases` showed 0 while charging; it now counts the phases switched to the car (`pha`)
 
 ### 0.1.0
 
