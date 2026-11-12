@@ -46,8 +46,8 @@ Hostnamen verwenden.
 
 ### 2. Paketdatei besorgen
 
-Entweder `iobroker.goe-wallbox-<Version>.tgz` aus den Releases dieses Repos laden (sobald Releases veröffentlicht
-sind) oder sie auf einem beliebigen Rechner mit Node.js 22 oder neuer selbst bauen:
+Entweder `iobroker.goe-wallbox-<Version>.tgz` aus den Releases dieses Repos laden oder sie auf einem beliebigen
+Rechner mit Node.js 22 oder neuer selbst bauen:
 
 ```bash
 git clone https://github.com/BenZ-ITS/ioBroker.goe-wallbox.git

@@ -44,8 +44,8 @@ host name.
 
 ### 2. Get the package file
 
-Either download `iobroker.goe-wallbox-<version>.tgz` from the releases of this repository (once releases are
-published), or build it yourself on any computer with Node.js 22 or newer:
+Either download `iobroker.goe-wallbox-<version>.tgz` from the releases of this repository, or build it yourself on
+any computer with Node.js 22 or newer:
 
 ```bash
 git clone https://github.com/BenZ-ITS/ioBroker.goe-wallbox.git

@@ -77,8 +77,12 @@ For a release:
 1. Raise the version in `package.json` and `io-package.json` (`common.version`) and add an entry to `common.news`
    and to the changelog in `README.md`.
 2. Run all checks including the integration test.
-3. Commit, tag `v<version>`, push.
-4. Attach the `.tgz` from `npm pack` to the GitHub release.
+3. Commit, tag `v<version>`, push both: `git push origin main v<version>`.
+
+The workflow then runs all tests for the tag and creates the GitHub release itself: it checks that the tag,
+`package.json` and `io-package.json` carry the same version, attaches the `.tgz` from `npm pack` and takes the
+release notes from `common.news` (English and German). For a tag that was pushed without a release, start the
+workflow by hand under **Actions → Test → Run workflow** and enter the tag.
 
 Publishing to npm and an entry in the ioBroker adapter repository are not set up yet. Both require the repository to
 be public; see the ioBroker developer documentation for the current requirements (adapter checker, test matrix,
@@ -87,7 +91,8 @@ translations).
 ## Continuous integration
 
 `.github/workflows/test-and-release.yml` runs type check, lint, unit and package tests, then the integration test on
-Node.js 22 and 24. While the repository is private only Linux runners are used; the comment in the workflow explains
+Node.js 22 and 24. For version tags it then creates the GitHub release (see above); this job uses the token that
+GitHub Actions provides and needs no secret. While the repository is private only Linux runners are used; the comment in the workflow explains
 how to switch the other systems back on before publishing.
 
 ## Known gaps
