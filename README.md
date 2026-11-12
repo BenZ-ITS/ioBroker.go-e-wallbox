@@ -180,7 +180,7 @@ Architecture, conventions and the release procedure are described in [docs/DEVEL
 
 ## Changelog
 
-### **WORK IN PROGRESS**
+### 0.1.1
 
 - Fix: `energy.phases` showed 0 while charging; it now counts the phases switched to the car (`pha`)
 

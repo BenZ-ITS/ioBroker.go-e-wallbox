@@ -1,8 +1,12 @@
 {
     "common": {
         "name": "goe-wallbox",
-        "version": "0.1.0",
+        "version": "0.1.1",
         "news": {
+            "0.1.1": {
+                "en": "Fix: energy.phases showed 0 while charging; it now counts the phases switched to the car",
+                "de": "Korrektur: energy.phases zeigte beim Laden 0; jetzt wird die Anzahl der zum Fahrzeug geschalteten Phasen angezeigt"
+            },
             "0.1.0": {
                 "en": "Initial release: local HTTP API v2, multiple wallboxes, read and write access, read-only mode",
                 "de": "Erste Version: lokale HTTP-API v2, mehrere Wallboxen, Lese- und Schreibzugriff, Nur-Lesen-Modus"

@@ -1,6 +1,6 @@
 {
     "name": "iobroker.goe-wallbox",
-    "version": "0.1.0",
+    "version": "0.1.1",
     "description": "Lean device mirror for go-e Charger wallboxes: all relevant values of the official local HTTP API v2 as ioBroker states, readable and writable, without built-in charging logic",
     "author": {
         "name": "ben"
