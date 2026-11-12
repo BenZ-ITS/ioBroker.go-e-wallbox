@@ -31,6 +31,78 @@ Wenn du eine fertige PV-Überschussregelung suchst, ist ein Adapter mit eingebau
 
 Unterstützung für die ältere API v1 (ältere Hardware) ist geplant; die Struktur der Datenpunkte bleibt dabei gleich.
 
+## Installation
+
+Der Adapter ist noch nicht auf npm veröffentlicht und noch nicht im ioBroker-Adapterverzeichnis gelistet. Er erscheint
+deshalb nicht in der Adapterliste der Admin-Oberfläche. Bis dahin wird er aus einer Paketdatei (`.tgz`) installiert.
+
+Die Installation direkt über die Adresse des GitHub-Repos funktioniert **nicht**: Das Repo enthält nur die
+TypeScript-Quellen, der übersetzte Code steckt in der Paketdatei.
+
+### 1. Wallbox vorbereiten
+
+In der go-e-App die **lokale HTTP-API v2** einschalten. Der Wallbox im Router eine feste IP-Adresse geben oder ihren
+Hostnamen verwenden.
+
+### 2. Paketdatei besorgen
+
+Entweder `iobroker.goe-wallbox-<Version>.tgz` aus den Releases dieses Repos laden (sobald Releases veröffentlicht
+sind) oder sie auf einem beliebigen Rechner mit Node.js 22 oder neuer selbst bauen:
+
+```bash
+git clone https://github.com/BenZ-ITS/ioBroker.goe-wallbox.git
+cd ioBroker.goe-wallbox
+npm ci
+npm run build
+npm pack
+```
+
+`npm pack` legt `iobroker.goe-wallbox-<Version>.tgz` im Projektordner ab. Die Datei nicht umbenennen: ioBroker leitet
+den Adapternamen aus dem Dateinamen ab.
+
+### 3. Paket installieren
+
+**In der Admin-Oberfläche**
+
+1. **Adapter** öffnen.
+2. Den **Expertenmodus** einschalten (Kopf-Symbol unten im Seitenmenü). Er gilt nur für die aktuelle Browsersitzung.
+3. In der Leiste auf das **GitHub-Symbol** klicken („Installieren aus eigener URL“).
+4. Einen dieser Reiter wählen:
+    - **Aus Datei**: die `.tgz` auf dem eigenen Rechner auswählen.
+    - **Benutzerdefiniert**: eine Adresse der `.tgz` eintragen, die der ioBroker-Host erreichen kann, oder den Pfad
+      der Datei auf dem ioBroker-Host.
+5. „Instanz erstellen, wenn noch keine existiert“ angehakt lassen und **Installieren** klicken.
+
+Die rote Warnung im Dialog erscheint bei jeder Installation außerhalb des offiziellen Verzeichnisses.
+
+**Auf der Kommandozeile des ioBroker-Hosts**
+
+```bash
+iobroker url /pfad/zu/iobroker.goe-wallbox-<Version>.tgz
+iobroker add goe-wallbox
+```
+
+### 4. Instanz einrichten
+
+1. **Instanzen** öffnen und die Einstellungen von `goe-wallbox.0` aufrufen.
+2. Je Wallbox eine Zeile mit IP-Adresse oder Hostname anlegen.
+3. Für den ersten Start empfohlen: **Nur-Lesen-Modus** anhaken. Der Adapter liest dann nur.
+4. Speichern. Im Log steht für jede Wallbox `connected`, und die Datenpunkte erscheinen unter
+   `goe-wallbox.0.<Seriennummer>`.
+5. Um die Wallbox über die Datenpunkte zu steuern, den Nur-Lesen-Modus wieder ausschalten.
+
+Ist eine Wallbox nicht erreichbar, nennt das Log den Grund. `HTTP 404` bedeutet, dass die lokale HTTP-API v2 nicht
+eingeschaltet ist.
+
+### Aktualisieren
+
+Die Paketdatei der neueren Version auf demselben Weg installieren. Instanz und Einstellungen bleiben erhalten.
+
+### Deinstallieren
+
+Die Instanz auf der Seite **Instanzen** löschen und danach den Adapter auf der Seite **Adapter**, oder auf dem Host
+`iobroker del goe-wallbox` ausführen.
+
 ## Konfiguration
 
 | Einstellung               | Bedeutung                                                                                                    |
@@ -106,8 +178,8 @@ npm test        # Unit- und Pakettests
 npm run test:integration   # startet den Adapter in einem echten js-controller
 ```
 
-Die Anbindung der Wallbox liegt hinter der kleinen Schnittstelle `ChargerTransport` (`src/lib/transport.ts`); die
-Datenpunkte sind als einfache Tabelle in `src/lib/datapoints.ts` beschrieben.
+Aufbau, Konventionen und der Ablauf einer Veröffentlichung stehen (auf Englisch) in
+[docs/DEVELOPMENT.md](../DEVELOPMENT.md).
 
 ## Änderungen und Lizenz
 
