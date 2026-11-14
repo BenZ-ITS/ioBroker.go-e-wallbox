@@ -25,9 +25,13 @@ Wenn du eine fertige PV-Überschussregelung suchst, ist ein Adapter mit eingebau
 
 ## Voraussetzungen
 
-- go-e Charger mit **lokaler HTTP-API v2** (in der go-e-App einschalten). Entwickelt und getestet mit einem
-  go-eCharger V4, Firmware 60.5.
+- go-e Charger mit **lokaler HTTP-API v2** (in der go-e-App einschalten).
 - Node.js 22 oder neuer, js-controller 6.0.11 oder neuer, Admin 7.6.20 oder neuer.
+
+> **Getestet mit:** go-eCharger **V4**, Firmware **60.5** – Lesen, Schreiben eines geänderten Werts, Ablehnen
+> ungültiger Werte und Übernahme von Änderungen aus der go-e-App. **Andere Modelle oder Firmware-Versionen sind nicht
+> getestet.** Andere Geräte mit lokaler HTTP-API v2 funktionieren wahrscheinlich, es können aber Datenpunkte fehlen
+> oder sich anders verhalten. Rückmeldungen sind willkommen.
 
 Unterstützung für die ältere API v1 (ältere Hardware) ist geplant; die Struktur der Datenpunkte bleibt dabei gleich.
 
@@ -54,7 +58,10 @@ einer Paketdatei (`.tgz`) installiert:
 3. In der Leiste auf das **GitHub-Symbol** klicken („Installieren aus eigener URL“) und einen dieser Reiter wählen:
     - **Aus Datei**: die `.tgz` auf dem eigenen Rechner auswählen.
     - **Benutzerdefiniert**: eine Adresse der `.tgz` eintragen, die der ioBroker-Host erreichen kann, oder den Pfad
-      der Datei auf dem ioBroker-Host.
+      der Datei auf dem ioBroker-Host. Für eine veröffentlichte Version funktioniert die npm-Adresse
+      `https://registry.npmjs.org/iobroker.go-e-wallbox/-/iobroker.go-e-wallbox-<Version>.tgz`. Adressen auf
+      `github.com`, auch der Download-Link eines GitHub-Releases, werden abgelehnt („Cannot install from GitHub“);
+      solche Dateien herunterladen und **Aus Datei** nehmen.
 4. „Instanz erstellen, wenn noch keine existiert“ angehakt lassen und **Installieren** klicken. Die rote Warnung im
    Dialog erscheint bei jeder Installation außerhalb des offiziellen Verzeichnisses.
 

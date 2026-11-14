@@ -23,9 +23,12 @@ If you want a ready-made PV surplus controller, an adapter with built-in control
 
 ## Requirements
 
-- go-e Charger with **local HTTP API v2** (enable it in the go-e app). Developed and tested with a go-eCharger V4,
-  firmware 60.5.
+- go-e Charger with **local HTTP API v2** (enable it in the go-e app).
 - Node.js 22 or newer, js-controller 6.0.11 or newer, admin 7.6.20 or newer.
+
+> **Tested with:** go-eCharger **V4**, firmware **60.5** – reading, writing a changed value, rejecting invalid values
+> and picking up changes made in the go-e app. **No other model or firmware version has been tested.** Other devices
+> with the local HTTP API v2 will probably work, but states may be missing or behave differently. Reports are welcome.
 
 Support for the legacy API v1 (older hardware) is planned; the state layout will stay the same.
 

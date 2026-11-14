@@ -199,7 +199,8 @@ function elementOf(key: string, index: number, digits: number): Datapoint['read'
  * Counts the phases switched to the car.
  *
  * `pha` holds six booleans: L1–L3 towards the car (behind the contactor), then L1–L3 at the supply.
- * The key `pnp` is not used: measured on firmware 60.5, it stays 0 while charging on one or three phases.
+ * The key `pnp` is not used: on the tested device (go-eCharger V4, firmware 60.5) it stays 0 while charging on one
+ * or three phases.
  */
 function switchedPhases(): Datapoint['read'] {
     return status => {

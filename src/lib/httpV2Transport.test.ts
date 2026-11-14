@@ -67,6 +67,15 @@ describe('HttpV2Transport', () => {
         });
     });
 
+    it('passes on the reason the firmware gives for a refused value', async () => {
+        // format of the answer as returned by the tested firmware for an out-of-range value
+        const { fetch } = fakeFetch(200, { lbr: 'lbr: failed: value must be uint8_t (300)' });
+        await assert.rejects(new HttpV2Transport('10.0.0.5', 1000, fetch).write('lbr', 300), {
+            name: 'ChargerApiError',
+            message: 'lbr: failed: value must be uint8_t (300)',
+        });
+    });
+
     it('hints at the disabled API on 404', async () => {
         const { fetch } = fakeFetch(404, {});
         await assert.rejects(new HttpV2Transport('10.0.0.5', 1000, fetch).read(['frc']), (error: unknown) => {

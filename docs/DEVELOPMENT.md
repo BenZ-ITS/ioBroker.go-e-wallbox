@@ -117,7 +117,10 @@ TypeScript sources, the compiled code is part of the package file.
 3. Click the **GitHub icon** in the toolbar and choose one of these tabs:
     - **From file**: select the `.tgz` on your computer.
     - **Custom**: enter a URL of the `.tgz` that the ioBroker host can reach, or the path of the file on the ioBroker
-      host.
+      host. For a published version the npm address works:
+      `https://registry.npmjs.org/iobroker.go-e-wallbox/-/iobroker.go-e-wallbox-<version>.tgz`. Addresses on
+      `github.com`, including the download link of a GitHub release, are refused ("Cannot install from GitHub");
+      download such a file and use **From file** instead.
 4. Leave "Create instance if it does not exist yet" checked and click **Install**. The red warning in the dialog is
    shown for every installation from outside the official repository.
 
@@ -251,8 +254,11 @@ Do not add `mocha` or `@types/mocha` to `devDependencies`; they come with `@iobr
 ## Known gaps
 
 - Only the local HTTP API v2 is implemented. API v1 (older hardware) is planned as a second transport.
-- Writing has been verified on a real wallbox only for a single key and an unchanged value. Changed values and the
-  answer of the wallbox to a rejected value are covered by unit tests with a fake only.
+- Only one device has been tested: go-eCharger V4, firmware 60.5. On it were verified: reading all states, writing a
+  changed value (acknowledged with the value the wallbox reports), a value refused by the adapter (warning, nothing
+  sent, state restored) and changes made outside ioBroker. The format of the wallbox's answer to an invalid value
+  (`{"<key>": "<key>: failed: …"}`) was measured directly; the adapter's reaction to it is covered by a unit test,
+  not by a test on the device. Other models, other firmware versions and several wallboxes at once are untested.
 - Not exposed yet: feeding PV data into the wallbox (`ids`), the temporary current limit (`tcl`), RFID cards,
   scheduler, load balancing, MQTT and OCPP settings. They can be read through "Additional API keys".
 - State names are available in English and German only.

@@ -7,7 +7,7 @@ function datapoint(id: string): Datapoint {
     return found;
 }
 
-/** Excerpt of a real answer of a go-eCharger V4 with firmware 60.5 */
+/** Excerpt of a status answer of the tested device (go-eCharger V4, firmware 60.5); serial number replaced */
 const STATUS = {
     sse: '000001',
     typ: 'go-eCharger_V4',
