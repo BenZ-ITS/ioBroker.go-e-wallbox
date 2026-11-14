@@ -11,18 +11,30 @@ The adapter is written from scratch; code of other adapters is not used as a tem
 
 ## Layout
 
-| Path                         | Content                                                                              |
-| ---------------------------- | ------------------------------------------------------------------------------------ |
-| `src/main.ts`                | Adapter class: configuration, poll loop, object creation, write handling             |
-| `src/lib/transport.ts`       | `ChargerTransport` interface: `read(keys)` and `write(key, value)`                   |
-| `src/lib/httpV2Transport.ts` | Local HTTP API v2 (`/api/status?filter=…`, `/api/set?key=<json>`)                    |
-| `src/lib/datapoints.ts`      | Table of all states: id, API keys, type, role, unit, value list, read/write mapping  |
-| `src/lib/*.test.ts`          | Unit tests, compiled to `build/` and run from there (not part of the npm package)    |
-| `admin/jsonConfig.json`      | Instance settings; texts in `admin/i18n/<lang>.json`                                 |
-| `test/package.js`            | Validation of `package.json` and `io-package.json`                                   |
-| `test/integration.js`        | Starts the adapter in a real js-controller                                           |
-| `scripts/check-release.mjs`  | Checks versions, news and release notes before a release                             |
-| `docs/de/README.md`          | German readme; keep it in step with `README.md`                                      |
+| Path                         | Content                                                                             |
+| ---------------------------- | ----------------------------------------------------------------------------------- |
+| `src/main.ts`                | Adapter class: configuration, poll loop, object creation, write handling            |
+| `src/lib/transport.ts`       | `ChargerTransport` interface: `read(keys)` and `write(key, value)`                  |
+| `src/lib/httpV2Transport.ts` | Local HTTP API v2 (`/api/status?filter=…`, `/api/set?key=<json>`)                   |
+| `src/lib/datapoints.ts`      | Table of all states: id, API keys, type, role, unit, value list, read/write mapping |
+| `src/lib/*.test.ts`          | Unit tests, compiled to `build/` and run from there (not part of the npm package)   |
+| `admin/jsonConfig.json`      | Instance settings; texts in `admin/i18n/<lang>.json`                                |
+| `test/package.js`            | Validation of `package.json` and `io-package.json`                                  |
+| `test/integration.js`        | Starts the adapter in a real js-controller                                          |
+| `scripts/check-release.mjs`  | Checks versions, news and release notes before a release                            |
+| `docs/de/README.md`          | German readme; keep it in step with `README.md`                                     |
+
+## Tools
+
+| Tool                                                                        | Used for                                                             |
+| --------------------------------------------------------------------------- | -------------------------------------------------------------------- |
+| [`@iobroker/testing`](https://github.com/ioBroker/testing)                  | Package and integration tests; also brings `mocha`                   |
+| [`@iobroker/eslint-config`](https://github.com/ioBroker/eslint-config)      | Lint and formatting rules (`npm run lint`, `--fix` formats)          |
+| [`@iobroker/adapter-dev`](https://github.com/ioBroker/adapter-dev)          | `npm run translate`: fills in missing languages                      |
+| [`@alcalzone/release-script`](https://github.com/AlCalzone/release-script)  | `npm run release`: version, changelog, news, commit, tag, push       |
+| ioBroker GitHub actions (`testing-action-check`, `-adapter`, `-deploy`)     | CI: checks, tests on all systems, npm publication and GitHub release |
+| [`@iobroker/repochecker`](https://github.com/ioBroker/ioBroker.repochecker) | Requirements of the ioBroker repository (run with `npx`, see below)  |
+| Dependabot                                                                  | Monthly dependency update pull requests                              |
 
 ## How it works
 
@@ -68,6 +80,18 @@ npm test
 
 `npm run test:integration` downloads a js-controller and takes about a minute; run it before a release and after
 changes to `main.ts` or `io-package.json`.
+
+## Fixing a bug
+
+1. Reproduce the problem and find the cause. Measure on a real wallbox where possible: save the complete
+   `/api/status` for each state of the device and compare the files. These files contain data of your installation;
+   never commit them or attach them to issues.
+2. Prefer values the wallbox reports itself over values the adapter derives from other keys.
+3. Fix it and add or extend a unit test. Run all checks; run the integration test after changes to `main.ts` or
+   `io-package.json`.
+4. Add a line to the changelog below `### **WORK IN PROGRESS**` in `README.md`.
+5. Commit, push and wait until all CI jobs are green.
+6. Release a patch version (see "Releasing").
 
 ## Installing a package file
 
@@ -121,11 +145,16 @@ npm and creates the GitHub release.
    `io-package.json` and updates changelog and news. It then runs `npm run release:check`: build, then
    `scripts/check-release.mjs` (same version everywhere, English and German news, release notes present). The
    release script runs this command without a shell, so it must stay a single npm script. Afterwards it pauses for a
-   review: check the German news text and correct it if needed. It then commits, tags `v<version>` and pushes both.
-   `npm run release patch -- --dry` shows what would happen without changing anything.
-5. The workflow runs all tests for the tag, checks the release metadata again, publishes to npm (`deploy` job) and
-   creates the GitHub release. The job `release-notes` attaches the `.tgz` from `npm pack` and replaces the text of
-   the release with the release notes.
+   review and asks "Are you done?".
+5. Review the changes before answering: `git diff`, especially the news in `io-package.json`. They are machine
+   translated and can be wrong; correct the German text by hand. **The default answer is "yes"**, so do not just
+   press Enter. After "yes" the script commits, tags `v<version>` and pushes both.
+
+`npm run release patch -- --dry` shows what would happen without changing anything. A dry run only prints the
+`release:check` command; it does not run it. 6. The workflow runs all tests for the tag, checks the release metadata again, publishes to npm (`deploy` job) and
+creates the GitHub release. The job `release-notes` attaches the `.tgz` from `npm pack` and replaces the text of
+the release with the release notes. 7. Check the result: `npm view iobroker.go-e-wallbox version dist-tags` and the GitHub release (package file and
+text).
 
 If a release step fails after the tag was pushed, fix the cause, delete the tag (`git push origin :refs/tags/v<version>`
 and `git tag -d v<version>`) and release a new patch version rather than moving the tag.
@@ -155,26 +184,46 @@ are the full description.
 ### Hintergrund
 ```
 
+## How the package is published
+
+- npm publishes `iobroker.go-e-wallbox` only from the `deploy` job of this repository's workflow, using
+  [trusted publishing](https://docs.npmjs.com/trusted-publishers): no npm token is stored anywhere.
+- The trusted publisher on npmjs.com (package → **Settings**) is GitHub Actions, repository
+  `BenZ-ITS/ioBroker.go-e-wallbox`, workflow `test-and-release.yml`, no environment. Under "Allowed actions",
+  **Allow npm publish** must be checked; without it the workflow may only stage a publication, which then needs a
+  manual approval.
+- "Publishing access" requires two-factor authentication and disallows tokens that bypass it. npm accepts only
+  WebAuthn for two-factor authentication (a security key or a passkey, for example from a password manager).
+- A trusted publisher can only be added to a package that exists. The first version was therefore published once
+  with a short-lived token, which was deleted afterwards.
+- The ioBroker organisation is owner of the npm package as well (`bluefox`), as the ioBroker repository requires.
+
+## Repository checker
+
+The ioBroker repository checker tests the requirements of the ioBroker adapter repository. Run the current version
+locally:
+
+```bash
+npx -y @iobroker/repochecker@latest https://github.com/BenZ-ITS/ioBroker.go-e-wallbox
+```
+
+- It waits up to ten minutes for running workflows.
+- Without a GitHub token it uses the anonymous GitHub API, limited to 60 requests per hour. If it stops with
+  "API rate limit exceeded", wait an hour. A file with `GITHUB_TOKEN=…` can be passed with `--env <file>`.
+- The web version at [adapter-check.iobroker.in](https://adapter-check.iobroker.in/) may run an older checker
+  version; the local run is authoritative.
+- Expected without a login: warnings that job logs cannot be read (W3050, W3052).
+
 ## Publishing in the ioBroker repository
 
-The requirements are listed in [ioBroker.repositories](https://github.com/ioBroker/ioBroker.repositories#readme);
-the [adapter checker](https://adapter-check.iobroker.in/) tests them. Check both again before each step, they change.
+The requirements are listed in [ioBroker.repositories](https://github.com/ioBroker/ioBroker.repositories#readme).
+Check them again before each step; they change.
 
-1. The repository is public, has a description and topics (GitHub: settings button beside "About"), and the test
-   matrix in the workflow covers Linux, Windows and macOS.
-2. First publication on npm, by hand, because trusted publishing can only be configured for an existing package:
-   `npm login`, then `npm publish` from a clean checkout of the latest release tag after `npm ci && npm run build`.
-   The `deploy` job of that tag fails until then; this is expected.
-3. On npmjs.com: package → **Settings → Trusted publishers → GitHub Actions**, owner `BenZ-ITS`, repository
-   `ioBroker.go-e-wallbox`, workflow `test-and-release.yml`, no environment. From then on the `deploy` job publishes
-   without a token.
-4. Add the ioBroker organisation as owner: `npm owner add bluefox iobroker.go-e-wallbox`. The invitation has to be
-   accepted, which can take a day or two.
-5. Run the adapter checker and fix all errors.
-6. Add the adapter to the **latest** (beta) repository: on [iobroker.dev](https://www.iobroker.dev) log in with
+1. The repository checker reports no errors.
+2. Add the adapter to the **latest** (beta) repository: on [iobroker.dev](https://www.iobroker.dev) log in with
    GitHub, open the adapter, **manage → ADD TO LATEST**; or fork `ioBroker/ioBroker.repositories` and run
    `npm run addToLatest -- --name go-e-wallbox --type energy`, then open a pull request.
-7. For **stable**: open a test thread in the ioBroker forum, collect feedback, then
+3. For **stable**: open a test thread in the ioBroker forum, collect feedback, then
    `npm run addToStable -- --name go-e-wallbox --version <version>` in the fork and open a pull request.
 
 ## Continuous integration
@@ -184,8 +233,20 @@ package tests; `adapter-tests` runs unit and integration tests on Node.js 22, 24
 macOS. For version tags `deploy` publishes to npm with trusted publishing (no npm token) and creates the GitHub
 release; `release-notes` completes it. Both use the token GitHub Actions provides and need no secret.
 
+## Dependency updates
+
 Dependabot (`.github/dependabot.yml`) proposes updates once a month, at the earliest seven days after a version was
-published. Major updates of `@types/node` and `typescript` are ignored on purpose.
+published. Major updates of `@types/node` and `typescript` are ignored on purpose: `@types/node` follows the minimum
+supported Node.js version, and TypeScript stays on 5.x until the ioBroker lint rules support a newer major.
+
+1. Wait until all CI jobs of the pull request are green.
+2. For a major update read the changelog of the package.
+3. Merge the pull request on GitHub, then `git pull` locally.
+
+Updates of dev dependencies and GitHub actions do not need a release. A release is only needed when
+`dependencies` (what users install) change.
+
+Do not add `mocha` or `@types/mocha` to `devDependencies`; they come with `@iobroker/testing`.
 
 ## Known gaps
 
