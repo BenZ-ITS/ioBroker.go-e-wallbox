@@ -149,9 +149,7 @@ Architecture, conventions and the release procedure are described in [docs/DEVEL
 
 ### **WORK IN PROGRESS**
 
-- (breaking) The adapter is renamed from `goe-wallbox` to `go-e-wallbox` (package `iobroker.go-e-wallbox`, states
-  below `go-e-wallbox.0`). An installation of `goe-wallbox` is not updated: install `go-e-wallbox`, enter the
-  wallboxes again and adjust scripts and visualisations to the new state ids, then remove `goe-wallbox`
+- Renamed to `go-e-wallbox` (package `iobroker.go-e-wallbox`)
 
 ### 0.1.1
 
