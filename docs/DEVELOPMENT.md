@@ -162,6 +162,28 @@ text).
 If a release step fails after the tag was pushed, fix the cause, delete the tag (`git push origin :refs/tags/v<version>`
 and `git tag -d v<version>`) and release a new patch version rather than moving the tag.
 
+### Pre-releases (alpha, beta, release candidate)
+
+The ioBroker repository has two channels: **latest** (beta) always offers the newest regular version on npm, and
+**stable** offers one fixed, tested version. There is no separate alpha or nightly channel. Pre-releases are
+therefore distributed through npm and GitHub only:
+
+1. Write changelog lines and release notes as for a normal release (`docs/release-notes/<version>.md`, e.g.
+   `0.2.0-beta.0.md`).
+2. Run the release script with a pre-release bump and an identifier:
+    - `npm run release preminor beta`: 0.1.3 → 0.2.0-beta.0
+    - `npm run release prepatch alpha`: 0.1.3 → 0.1.4-alpha.0
+    - `npm run release prerelease`: 0.2.0-beta.0 → 0.2.0-beta.1
+3. The workflow publishes versions with a hyphen under the npm tag **`next`** (not `latest`) and marks the GitHub
+   release as a **pre-release**. Users on the regular channels do not receive it.
+4. Testers install it in the admin (expert mode, "Install from custom URL" → **Custom**) with
+   `https://registry.npmjs.org/iobroker.go-e-wallbox/-/iobroker.go-e-wallbox-<version>.tgz`, or download the `.tgz`
+   of the GitHub pre-release and use **From file**.
+5. The final version follows with the normal bump: `npm run release minor` turns 0.2.0-beta.1 into 0.2.0, which is
+   published as `latest` and reaches the latest channel.
+
+Check with `npm view iobroker.go-e-wallbox dist-tags` that `latest` still points to the last regular version.
+
 ### Release notes
 
 Every version gets a file `docs/release-notes/<version>.md` with an English and a German part. Each part answers
