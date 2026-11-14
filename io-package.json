@@ -5,7 +5,7 @@
     "news": {
       "0.1.2": {
         "en": "Renamed to `go-e-wallbox` (package `iobroker.go-e-wallbox`)\nTested on Linux, Windows and macOS with Node.js 22, 24 and 26",
-        "de": "Umbenannt in `go-e-wallbox` (Paket `iobroker.go-e-wallbox`)\nGetestet auf Linux und macOS mit Node.js 22, 24 und 26",
+        "de": "Umbenannt in `go-e-wallbox` (Paket `iobroker.go-e-wallbox`)\nGetestet unter Linux, Windows und macOS mit Node.js 22, 24 und 26",
         "ru": "Переименован в `go-e-wallbox` (пакет `iobroker.go-e-wallbox`)\nПротестировано на Linux, Windows и macOS с помощью файлов Node.js 22, 24 и 26",
         "pt": "Renomeado para `go-e-wallbox` (pacote `iobroker.go-e-wallbox`)\nTestado em Linux, Windows e macOS com Node.js 22, 24 e 26",
         "nl": "Hernoemd naar `go-e-wallbox` (pakket `iobroker.go-e-wallbox`)\nGetest op Linux, Windows en MacOS met Node.js 22, 24 en 26",
