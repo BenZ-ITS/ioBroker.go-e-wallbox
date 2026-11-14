@@ -1,92 +1,113 @@
 {
-    "common": {
-        "name": "go-e-wallbox",
-        "version": "0.1.1",
-        "news": {
-            "0.1.1": {
-                "en": "Fix: energy.phases showed 0 while charging; it now counts the phases switched to the car",
-                "de": "Korrektur: energy.phases zeigte beim Laden 0; jetzt wird die Anzahl der zum Fahrzeug geschalteten Phasen angezeigt"
-            },
-            "0.1.0": {
-                "en": "Initial release: local HTTP API v2, multiple wallboxes, read and write access, read-only mode",
-                "de": "Erste Version: lokale HTTP-API v2, mehrere Wallboxen, Lese- und Schreibzugriff, Nur-Lesen-Modus"
-            }
-        },
-        "titleLang": {
-            "en": "go-e Charger Wallbox (API mirror)",
-            "de": "go-e Charger Wallbox (API-Spiegel)"
-        },
-        "desc": {
-            "en": "Lean device mirror for go-e Charger wallboxes: all relevant values of the official local HTTP API v2 as states, readable and writable, without built-in charging logic",
-            "de": "Schlanker Geräte-Spiegel für go-e Charger Wallboxen: alle wichtigen Werte der offiziellen lokalen HTTP-API v2 als Datenpunkte, lesend und schreibend, ohne eingebaute Ladelogik"
-        },
-        "authors": ["ben"],
-        "keywords": ["go-e", "go-eCharger", "wallbox", "ev charger", "energy"],
-        "licenseInformation": {
-            "type": "free",
-            "license": "MIT"
-        },
-        "platform": "Javascript/Node.js",
-        "icon": "go-e-wallbox.png",
-        "enabled": true,
-        "extIcon": "https://raw.githubusercontent.com/BenZ-ITS/ioBroker.go-e-wallbox/main/admin/go-e-wallbox.png",
-        "readme": "https://github.com/BenZ-ITS/ioBroker.go-e-wallbox/blob/main/README.md",
-        "loglevel": "info",
-        "tier": 2,
-        "mode": "daemon",
-        "type": "energy",
-        "compact": true,
-        "connectionType": "local",
-        "dataSource": "poll",
-        "adminUI": {
-            "config": "json"
-        },
-        "dependencies": [
-            {
-                "js-controller": ">=6.0.11"
-            }
-        ],
-        "globalDependencies": [
-            {
-                "admin": ">=7.6.17"
-            }
-        ]
+  "common": {
+    "name": "go-e-wallbox",
+    "version": "0.1.2",
+    "news": {
+      "0.1.2": {
+        "en": "Renamed to `go-e-wallbox` (package `iobroker.go-e-wallbox`)\nTested on Linux, Windows and macOS with Node.js 22, 24 and 26",
+        "de": "Umbenannt in `go-e-wallbox` (Paket `iobroker.go-e-wallbox`)\nGetestet auf Linux und macOS mit Node.js 22, 24 und 26",
+        "ru": "Переименован в `go-e-wallbox` (пакет `iobroker.go-e-wallbox`)\nПротестировано на Linux, Windows и macOS с помощью файлов Node.js 22, 24 и 26",
+        "pt": "Renomeado para `go-e-wallbox` (pacote `iobroker.go-e-wallbox`)\nTestado em Linux, Windows e macOS com Node.js 22, 24 e 26",
+        "nl": "Hernoemd naar `go-e-wallbox` (pakket `iobroker.go-e-wallbox`)\nGetest op Linux, Windows en MacOS met Node.js 22, 24 en 26",
+        "fr": "Renommé en « go-e-wallbox » (package « iobroker.go-e-wallbox »)\nTesté sur Linux, Windows et macOS avec Node.js 22, 24 et 26",
+        "it": "Rinominato «go-e-wallbox» (pacchetto «iobroker.go-e-wallbox»)\nTestato su Linux, Windows e macOS con Node.js 22, 24 e 26",
+        "es": "Cambiado a `go-e-wallbox` (paquete `iobroker.go-e-wallbox`)\nProbado en Linux, Windows y macOS con Node.js 22, 24 y 26",
+        "pl": "Zmiana nazwy na `go-e-wallbox` (pakiet `iobroker.go-e-wallbox`)\nTestowane na systemach Linux, Windows i macOS z Node.js 22, 24 i 26",
+        "uk": "Перейменовано на `go-e-wallbox` (пакунок `iobroker.go-e-wallbox`)\nПеревірено на Linux, Windows та macOS з Node.js 22, 24 та 26",
+        "zh-cn": "重命名为 go-e-wallbox（软件包 `iobroker.go-e-wallbox`）\n使用 Node.js 22、24 和 26 在 Linux、Windows 和 macOS 上测试"
+      },
+      "0.1.1": {
+        "en": "Fix: energy.phases showed 0 while charging; it now counts the phases switched to the car",
+        "de": "Korrektur: energy.phases zeigte beim Laden 0; jetzt wird die Anzahl der zum Fahrzeug geschalteten Phasen angezeigt"
+      },
+      "0.1.0": {
+        "en": "Initial release: local HTTP API v2, multiple wallboxes, read and write access, read-only mode",
+        "de": "Erste Version: lokale HTTP-API v2, mehrere Wallboxen, Lese- und Schreibzugriff, Nur-Lesen-Modus"
+      }
     },
-    "native": {
-        "chargers": [],
-        "pollInterval": 5,
-        "requestTimeout": 4,
-        "readOnly": false,
-        "extraKeys": ""
+    "titleLang": {
+      "en": "go-e Charger Wallbox (API mirror)",
+      "de": "go-e Charger Wallbox (API-Spiegel)"
     },
-    "objects": [],
-    "instanceObjects": [
-        {
-            "_id": "info",
-            "type": "channel",
-            "common": {
-                "name": {
-                    "en": "Information",
-                    "de": "Information"
-                }
-            },
-            "native": {}
-        },
-        {
-            "_id": "info.connection",
-            "type": "state",
-            "common": {
-                "role": "indicator.connected",
-                "name": {
-                    "en": "At least one wallbox is reachable",
-                    "de": "Mindestens eine Wallbox ist erreichbar"
-                },
-                "type": "boolean",
-                "read": true,
-                "write": false,
-                "def": false
-            },
-            "native": {}
-        }
+    "desc": {
+      "en": "Lean device mirror for go-e Charger wallboxes: all relevant values of the official local HTTP API v2 as states, readable and writable, without built-in charging logic",
+      "de": "Schlanker Geräte-Spiegel für go-e Charger Wallboxen: alle wichtigen Werte der offiziellen lokalen HTTP-API v2 als Datenpunkte, lesend und schreibend, ohne eingebaute Ladelogik"
+    },
+    "authors": [
+      "ben"
+    ],
+    "keywords": [
+      "go-e",
+      "go-eCharger",
+      "wallbox",
+      "ev charger",
+      "energy"
+    ],
+    "licenseInformation": {
+      "type": "free",
+      "license": "MIT"
+    },
+    "platform": "Javascript/Node.js",
+    "icon": "go-e-wallbox.png",
+    "enabled": true,
+    "extIcon": "https://raw.githubusercontent.com/BenZ-ITS/ioBroker.go-e-wallbox/main/admin/go-e-wallbox.png",
+    "readme": "https://github.com/BenZ-ITS/ioBroker.go-e-wallbox/blob/main/README.md",
+    "loglevel": "info",
+    "tier": 2,
+    "mode": "daemon",
+    "type": "energy",
+    "compact": true,
+    "connectionType": "local",
+    "dataSource": "poll",
+    "adminUI": {
+      "config": "json"
+    },
+    "dependencies": [
+      {
+        "js-controller": ">=6.0.11"
+      }
+    ],
+    "globalDependencies": [
+      {
+        "admin": ">=7.6.17"
+      }
     ]
+  },
+  "native": {
+    "chargers": [],
+    "pollInterval": 5,
+    "requestTimeout": 4,
+    "readOnly": false,
+    "extraKeys": ""
+  },
+  "objects": [],
+  "instanceObjects": [
+    {
+      "_id": "info",
+      "type": "channel",
+      "common": {
+        "name": {
+          "en": "Information",
+          "de": "Information"
+        }
+      },
+      "native": {}
+    },
+    {
+      "_id": "info.connection",
+      "type": "state",
+      "common": {
+        "role": "indicator.connected",
+        "name": {
+          "en": "At least one wallbox is reachable",
+          "de": "Mindestens eine Wallbox ist erreichbar"
+        },
+        "type": "boolean",
+        "read": true,
+        "write": false,
+        "def": false
+      },
+      "native": {}
+    }
+  ]
 }
