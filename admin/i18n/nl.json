@@ -1,0 +1,15 @@
+{
+    "apiHint": "Voor elke wallbox moet de lokale HTTP API v2 zijn ingeschakeld in de go-e app.",
+    "chargers": "Wallboxen",
+    "enabled": "Actief",
+    "extraKeys": "Extra API-sleutels",
+    "extraKeysHelp": "Door komma's gescheiden sleutels uit de go-e API-documentatie, onverwerkt weergegeven onder 'onbewerkt'",
+    "host": "IP-adres of hostnaam",
+    "name": "Naam (optioneel)",
+    "pollInterval": "Poll-interval",
+    "pollIntervalHelp": "Seconden tussen twee statusverzoeken",
+    "readOnly": "Alleen-lezen-modus",
+    "readOnlyHelp": "De adapter stuurt nooit iets naar de wallboxen; geschreven toestanden worden gereset",
+    "requestTimeout": "Time-out aanvragen",
+    "requestTimeoutHelp": "Seconden totdat een verzoek als mislukt wordt beschouwd"
+}

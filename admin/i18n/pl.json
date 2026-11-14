@@ -1,0 +1,15 @@
+{
+    "apiHint": "Lokalny interfejs HTTP API v2 musi być włączony w aplikacji go-e dla każdej stacji ładowania Wallbox.",
+    "chargers": "Wallboxy",
+    "enabled": "Aktywny",
+    "extraKeys": "Dodatkowe klucze API",
+    "extraKeysHelp": "Klucze oddzielone przecinkami z dokumentacji API go-e, pokazane jako nieprzetworzone poniżej „surowe”",
+    "host": "Adres IP lub nazwa hosta",
+    "name": "Imię (opcjonalnie)",
+    "pollInterval": "Interwał ankiety",
+    "pollIntervalHelp": "Sekundy między dwoma żądaniami statusu",
+    "readOnly": "Tryb tylko do odczytu",
+    "readOnlyHelp": "Adapter nigdy nie wysyła niczego do stacji ładowania; stany zapisane są resetowane",
+    "requestTimeout": "Poproś o przekroczenie limitu czasu",
+    "requestTimeoutHelp": "Sekundy do uznania żądania za nieudane"
+}

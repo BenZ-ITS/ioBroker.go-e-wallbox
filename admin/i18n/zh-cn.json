@@ -1,0 +1,15 @@
+{
+    "apiHint": "必须在每个 Wallbox 的 go-e 应用程序中启用本地 HTTP API v2。",
+    "chargers": "壁箱",
+    "enabled": "积极的",
+    "extraKeys": "附加 API 密钥",
+    "extraKeysHelp": "来自 go-e API 文档的逗号分隔键，在“raw”下面显示未处理的",
+    "host": "IP 地址或主机名",
+    "name": "姓名（可选）",
+    "pollInterval": "轮询间隔",
+    "pollIntervalHelp": "两次状态请求之间的秒数",
+    "readOnly": "只读模式",
+    "readOnlyHelp": "适配器从不向壁箱发送任何内容；写入状态被重置",
+    "requestTimeout": "请求超时",
+    "requestTimeoutHelp": "请求被视为失败之前的秒数"
+}

@@ -18,7 +18,7 @@ The adapter is written from scratch; code of other adapters is not used as a tem
 | `src/lib/httpV2Transport.ts` | Local HTTP API v2 (`/api/status?filter=…`, `/api/set?key=<json>`)                    |
 | `src/lib/datapoints.ts`      | Table of all states: id, API keys, type, role, unit, value list, read/write mapping  |
 | `src/lib/*.test.ts`          | Unit tests, compiled to `build/` and run from there (not part of the npm package)    |
-| `admin/jsonConfig.json`      | Instance settings; texts in `admin/i18n/<lang>/translations.json`                    |
+| `admin/jsonConfig.json`      | Instance settings; texts in `admin/i18n/<lang>.json`                                 |
 | `test/package.js`            | Validation of `package.json` and `io-package.json`                                   |
 | `test/integration.js`        | Starts the adapter in a real js-controller                                           |
 | `scripts/check-release.mjs`  | Checks versions, news and release notes before a release                             |
@@ -42,6 +42,9 @@ The adapter is written from scratch; code of other adapters is not used as a tem
   for the legacy API v1 has to translate its fields to these names; the datapoints must not change.
 - State ids are part of the public interface. Do not rename or re-scale an existing state; add a new one instead.
 - Code, log messages and commit messages are in English. User-facing texts exist in English and German.
+- Admin texts (`admin/i18n/en.json`, `de.json`) and `titleLang`/`desc` in `io-package.json` are written by hand in
+  English and German. `npm run translate` fills in the other ioBroker languages by machine translation; it does not
+  overwrite existing texts. The ioBroker repository checker requires all languages.
 - Member names of the adapter class must not collide with members of the ioBroker base class (for example
   `connected` or `createDevice`); the type check reports such collisions.
 - No example in code, tests or documentation may contain real addresses, serial numbers or other data of an actual

@@ -2,14 +2,14 @@
     "apiHint": "Die lokale HTTP-API v2 muss in der go-e-App für jede Wallbox eingeschaltet sein.",
     "chargers": "Wallboxen",
     "enabled": "Aktiv",
-    "name": "Name (optional)",
+    "extraKeys": "Zusätzliche API-Schlüssel",
+    "extraKeysHelp": "Durch Komma getrennte Schlüssel aus der go-e-API-Dokumentation, unverarbeitet unter „raw“ angezeigt",
     "host": "IP-Adresse oder Hostname",
+    "name": "Name (optional)",
     "pollInterval": "Abfrageintervall",
     "pollIntervalHelp": "Sekunden zwischen zwei Statusabfragen",
-    "requestTimeout": "Zeitlimit je Anfrage",
-    "requestTimeoutHelp": "Sekunden, nach denen eine Anfrage als fehlgeschlagen gilt",
     "readOnly": "Nur-Lesen-Modus",
     "readOnlyHelp": "Der Adapter sendet nie etwas an die Wallboxen; geschriebene Datenpunkte werden zurückgesetzt",
-    "extraKeys": "Zusätzliche API-Schlüssel",
-    "extraKeysHelp": "Durch Komma getrennte Schlüssel aus der go-e-API-Dokumentation, unverarbeitet unter „raw“ angezeigt"
+    "requestTimeout": "Zeitlimit je Anfrage",
+    "requestTimeoutHelp": "Sekunden, nach denen eine Anfrage als fehlgeschlagen gilt"
 }

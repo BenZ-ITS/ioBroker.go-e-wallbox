@@ -19,14 +19,32 @@
     },
     "titleLang": {
       "en": "go-e Charger Wallbox (API mirror)",
-      "de": "go-e Charger Wallbox (API-Spiegel)"
+      "de": "go-e Charger Wallbox (API-Spiegel)",
+      "ru": "Go-e Charger Wallbox (зеркало API)",
+      "pt": "go-e Charger Wallbox (espelho API)",
+      "nl": "go-e Charger Wallbox (API-spiegel)",
+      "fr": "go-e Charger Wallbox (miroir API)",
+      "it": "go-e Charger Wallbox (mirror API)",
+      "es": "go-e Charger Wallbox (espejo API)",
+      "pl": "go-e Charger Wallbox (lustro API)",
+      "uk": "зарядний пристрій go-e Wallbox (дзеркало API)",
+      "zh-cn": "go-e Charger Wallbox（API镜像）"
     },
     "desc": {
       "en": "Lean device mirror for go-e Charger wallboxes: all relevant values of the official local HTTP API v2 as states, readable and writable, without built-in charging logic",
-      "de": "Schlanker Geräte-Spiegel für go-e Charger Wallboxen: alle wichtigen Werte der offiziellen lokalen HTTP-API v2 als Datenpunkte, lesend und schreibend, ohne eingebaute Ladelogik"
+      "de": "Schlanker Geräte-Spiegel für go-e Charger Wallboxen: alle wichtigen Werte der offiziellen lokalen HTTP-API v2 als Datenpunkte, lesend und schreibend, ohne eingebaute Ladelogik",
+      "ru": "Зеркало экономичного устройства для настенных коробок go-e Charger: все соответствующие значения официального локального HTTP API v2 в виде состояний, доступные для чтения и записи, без встроенной логики зарядки.",
+      "pt": "Espelho de dispositivo enxuto para wallboxes go-e Charger: todos os valores relevantes da API HTTP local oficial v2 como estados, legíveis e graváveis, sem lógica de carregamento integrada",
+      "nl": "Lean device mirror voor go-e Charger wallboxen: alle relevante waarden van de officiële lokale HTTP API v2 als statussen, leesbaar en schrijfbaar, zonder ingebouwde oplaadlogica",
+      "fr": "Miroir d'appareil Lean pour les boîtiers muraux Go-e Charger : toutes les valeurs pertinentes de l'API HTTP locale officielle v2 sous forme d'états, lisibles et inscriptibles, sans logique de charge intégrée.",
+      "it": "Lean Device Mirror per wallbox go-e Charger: tutti i valori rilevanti dell'API HTTP locale ufficiale v2 come stati, leggibili e scrivibili, senza logica di ricarica integrata",
+      "es": "Espejo de dispositivo Lean para cajas de pared go-e Charger: todos los valores relevantes de la API HTTP v2 local oficial como estados, legibles y escribibles, sin lógica de carga incorporada",
+      "pl": "Uszczuplone lustro urządzenia dla stacji ładowania go-e Charger: wszystkie istotne wartości oficjalnego lokalnego interfejsu HTTP API v2 jako stany, czytelne i zapisywalne, bez wbudowanej logiki ładowania",
+      "uk": "Економне дзеркало пристрою для настінних зарядних пристроїв go-e Charger: усі відповідні значення офіційного місцевого HTTP API v2 у вигляді станів, доступні для читання та запису, без вбудованої логіки заряджання",
+      "zh-cn": "go-e Charger 墙盒的精益设备镜像：官方本地 HTTP API v2 的所有相关值作为状态，可读可写，无内置充电逻辑"
     },
     "authors": [
-      "ben"
+      "ben <go-e-wallbox@e-bin.de>"
     ],
     "keywords": [
       "go-e",
@@ -62,7 +80,7 @@
     ],
     "globalDependencies": [
       {
-        "admin": ">=7.6.17"
+        "admin": ">=7.6.20"
       }
     ]
   },

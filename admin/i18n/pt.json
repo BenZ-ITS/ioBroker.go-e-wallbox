@@ -1,0 +1,15 @@
+{
+    "apiHint": "A API HTTP local v2 deve ser habilitada no aplicativo go-e para cada wallbox.",
+    "chargers": "Caixas de embutir",
+    "enabled": "Ativo",
+    "extraKeys": "Chaves de API adicionais",
+    "extraKeysHelp": "Chaves separadas por vírgula da documentação da API go-e, mostradas sem processamento abaixo de \"bruto\"",
+    "host": "Endereço IP ou nome do host",
+    "name": "Nome (opcional)",
+    "pollInterval": "Intervalo de pesquisa",
+    "pollIntervalHelp": "Segundos entre duas solicitações de status",
+    "readOnly": "Modo somente leitura",
+    "readOnlyHelp": "O adaptador nunca envia nada para as wallboxes; estados escritos são redefinidos",
+    "requestTimeout": "Solicitar tempo limite",
+    "requestTimeoutHelp": "Segundos até que uma solicitação seja considerada falhada"
+}

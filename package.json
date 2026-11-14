@@ -3,7 +3,8 @@
   "version": "0.1.2",
   "description": "Lean device mirror for go-e Charger wallboxes: all relevant values of the official local HTTP API v2 as ioBroker states, readable and writable, without built-in charging logic",
   "author": {
-    "name": "ben"
+    "name": "ben",
+    "email": "go-e-wallbox@e-bin.de"
   },
   "homepage": "https://github.com/BenZ-ITS/ioBroker.go-e-wallbox",
   "license": "MIT",
@@ -45,7 +46,8 @@
     "test:integration": "npm run build && mocha test/integration.js --exit",
     "test": "npm run test:unit && npm run test:package",
     "release": "release-script",
-    "release:check": "npm run build && node scripts/check-release.mjs"
+    "release:check": "npm run build && node scripts/check-release.mjs",
+    "translate": "translate-adapter"
   },
   "dependencies": {
     "@iobroker/adapter-core": "^3.4.3"
@@ -55,13 +57,12 @@
     "@alcalzone/release-script-plugin-iobroker": "^5.2.0",
     "@alcalzone/release-script-plugin-license": "^5.2.2",
     "@alcalzone/release-script-plugin-manual-review": "^5.2.0",
+    "@iobroker/adapter-dev": "^1.5.0",
     "@iobroker/eslint-config": "^2.3.4",
     "@iobroker/testing": "^6.3.2",
     "@iobroker/types": "^7.2.5",
     "@tsconfig/node22": "^22.0.6",
-    "@types/mocha": "^10.0.10",
     "@types/node": "^22.19.0",
-    "mocha": "^11.7.5",
     "typescript": "~5.9.3"
   }
 }

@@ -27,7 +27,7 @@ Wenn du eine fertige PV-Überschussregelung suchst, ist ein Adapter mit eingebau
 
 - go-e Charger mit **lokaler HTTP-API v2** (in der go-e-App einschalten). Entwickelt und getestet mit einem
   go-eCharger V4, Firmware 60.5.
-- Node.js 22 oder neuer, js-controller 6.0.11 oder neuer, Admin 7.6.17 oder neuer.
+- Node.js 22 oder neuer, js-controller 6.0.11 oder neuer, Admin 7.6.20 oder neuer.
 
 Unterstützung für die ältere API v1 (ältere Hardware) ist geplant; die Struktur der Datenpunkte bleibt dabei gleich.
 

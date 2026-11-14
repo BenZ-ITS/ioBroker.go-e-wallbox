@@ -1,0 +1,15 @@
+{
+    "apiHint": "L'API HTTP locale v2 doit être activée dans l'application go-e pour chaque wallbox.",
+    "chargers": "Boîtes murales",
+    "enabled": "Actif",
+    "extraKeys": "Clés API supplémentaires",
+    "extraKeysHelp": "Clés séparées par des virgules de la documentation de l'API go-e, affichées non traitées ci-dessous \"brutes\"",
+    "host": "Adresse IP ou nom d'hôte",
+    "name": "Nom (facultatif)",
+    "pollInterval": "Intervalle d'interrogation",
+    "pollIntervalHelp": "Secondes entre deux demandes de statut",
+    "readOnly": "Mode lecture seule",
+    "readOnlyHelp": "L'adaptateur n'envoie jamais rien aux wallbox ; les états écrits sont réinitialisés",
+    "requestTimeout": "Expiration du délai de demande",
+    "requestTimeoutHelp": "Secondes jusqu'à ce qu'une demande soit considérée comme ayant échoué"
+}

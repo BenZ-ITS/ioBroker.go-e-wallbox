@@ -1,0 +1,15 @@
+{
+    "apiHint": "La API HTTP local v2 debe estar habilitada en la aplicación goe para cada wallbox.",
+    "chargers": "Cajas de empotrar",
+    "enabled": "Activo",
+    "extraKeys": "Claves API adicionales",
+    "extraKeysHelp": "Claves separadas por comas de la documentación de la API de goe, que se muestran sin procesar debajo \"sin procesar\"",
+    "host": "Dirección IP o nombre de host",
+    "name": "Nombre (opcional)",
+    "pollInterval": "Intervalo de encuesta",
+    "pollIntervalHelp": "Segundos entre dos solicitudes de estado",
+    "readOnly": "Modo de solo lectura",
+    "readOnlyHelp": "El adaptador nunca envía nada a las wallboxes; los estados escritos se restablecen",
+    "requestTimeout": "Solicitar tiempo de espera",
+    "requestTimeoutHelp": "Segundos hasta que una solicitud se considera fallida"
+}
