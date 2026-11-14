@@ -115,9 +115,10 @@ npm and creates the GitHub release.
 2. Write the release notes in `docs/release-notes/<new version>.md` (see below).
 3. Commit both. The working tree must be clean; run all checks including the integration test.
 4. Run `npm run release patch` (or `minor`, `major`). The script raises the version in `package.json` and
-   `io-package.json`, updates changelog and news, and pauses for a review: check the German news text and correct
-   it if needed. Before committing it builds the adapter and runs `scripts/check-release.mjs` (same version
-   everywhere, English and German news, release notes present). It then commits, tags `v<version>` and pushes both.
+   `io-package.json` and updates changelog and news. It then runs `npm run release:check`: build, then
+   `scripts/check-release.mjs` (same version everywhere, English and German news, release notes present). The
+   release script runs this command without a shell, so it must stay a single npm script. Afterwards it pauses for a
+   review: check the German news text and correct it if needed. It then commits, tags `v<version>` and pushes both.
    `npm run release patch -- --dry` shows what would happen without changing anything.
 5. The workflow runs all tests for the tag, checks the release metadata again, publishes to npm (`deploy` job) and
    creates the GitHub release. The job `release-notes` attaches the `.tgz` from `npm pack` and replaces the text of

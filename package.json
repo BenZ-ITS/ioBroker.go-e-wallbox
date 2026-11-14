@@ -44,7 +44,8 @@
         "test:package": "mocha test/package.js --exit",
         "test:integration": "npm run build && mocha test/integration.js --exit",
         "test": "npm run test:unit && npm run test:package",
-        "release": "release-script"
+        "release": "release-script",
+        "release:check": "npm run build && node scripts/check-release.mjs"
     },
     "dependencies": {
         "@iobroker/adapter-core": "^3.4.3"
