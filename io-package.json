@@ -15,14 +15,6 @@
         "pl": "Zmiana nazwy na `go-e-wallbox` (pakiet `iobroker.go-e-wallbox`)\nTestowane na systemach Linux, Windows i macOS z Node.js 22, 24 i 26",
         "uk": "Перейменовано на `go-e-wallbox` (пакунок `iobroker.go-e-wallbox`)\nПеревірено на Linux, Windows та macOS з Node.js 22, 24 та 26",
         "zh-cn": "重命名为 go-e-wallbox（软件包 `iobroker.go-e-wallbox`）\n使用 Node.js 22、24 和 26 在 Linux、Windows 和 macOS 上测试"
-      },
-      "0.1.1": {
-        "en": "Fix: energy.phases showed 0 while charging; it now counts the phases switched to the car",
-        "de": "Korrektur: energy.phases zeigte beim Laden 0; jetzt wird die Anzahl der zum Fahrzeug geschalteten Phasen angezeigt"
-      },
-      "0.1.0": {
-        "en": "Initial release: local HTTP API v2, multiple wallboxes, read and write access, read-only mode",
-        "de": "Erste Version: lokale HTTP-API v2, mehrere Wallboxen, Lese- und Schreibzugriff, Nur-Lesen-Modus"
       }
     },
     "titleLang": {
@@ -50,6 +42,7 @@
     "platform": "Javascript/Node.js",
     "icon": "go-e-wallbox.png",
     "enabled": true,
+    "nogit": true,
     "extIcon": "https://raw.githubusercontent.com/BenZ-ITS/ioBroker.go-e-wallbox/main/admin/go-e-wallbox.png",
     "readme": "https://github.com/BenZ-ITS/ioBroker.go-e-wallbox/blob/main/README.md",
     "loglevel": "info",
