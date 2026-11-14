@@ -146,6 +146,13 @@ Architecture, conventions and the release procedure are described in [docs/DEVEL
     Placeholder for the next version (at the beginning of the line):
     ### **WORK IN PROGRESS**
 -->
+
+### **WORK IN PROGRESS**
+
+- Settings page, title and description in all languages of ioBroker
+- Requires admin 7.6.20 or newer
+- Published with npm provenance
+
 ### 0.1.2 (2026-11-14)
 
 - Renamed to `go-e-wallbox` (package `iobroker.go-e-wallbox`)
