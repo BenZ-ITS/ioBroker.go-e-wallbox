@@ -150,6 +150,7 @@ Architecture, conventions and the release procedure are described in [docs/DEVEL
 ### **WORK IN PROGRESS**
 
 - Renamed to `go-e-wallbox` (package `iobroker.go-e-wallbox`)
+- Tested on Linux, Windows and macOS with Node.js 22, 24 and 26
 
 ### 0.1.1
 
