@@ -40,7 +40,7 @@ const WRITABLE = new Map<string, Datapoint>(
     DATAPOINTS.filter(datapoint => datapoint.write).map(datapoint => [datapoint.id, datapoint]),
 );
 
-class GoeWallbox extends utils.Adapter {
+class GoEWallbox extends utils.Adapter {
     private chargers: Charger[] = [];
     private keys: string[] = [];
     private extraKeys: string[] = [];
@@ -49,7 +49,7 @@ class GoeWallbox extends utils.Adapter {
     private anyReachable: boolean | undefined;
 
     public constructor(options: Partial<utils.AdapterOptions> = {}) {
-        super({ ...options, name: 'goe-wallbox' });
+        super({ ...options, name: 'go-e-wallbox' });
         this.on('ready', () => this.onReady());
         this.on('stateChange', (id, state) => this.onStateChange(id, state));
         this.on('unload', callback => this.onUnload(callback));
@@ -361,8 +361,8 @@ function errorText(error: unknown): string {
 
 if (require.main !== module) {
     // started in compact mode: export the constructor
-    module.exports = (options: Partial<utils.AdapterOptions> | undefined) => new GoeWallbox(options);
+    module.exports = (options: Partial<utils.AdapterOptions> | undefined) => new GoEWallbox(options);
 } else {
     // started directly
-    (() => new GoeWallbox())();
+    (() => new GoEWallbox())();
 }

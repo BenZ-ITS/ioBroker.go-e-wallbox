@@ -1,11 +1,11 @@
 {
-    "name": "iobroker.goe-wallbox",
+    "name": "iobroker.go-e-wallbox",
     "version": "0.1.1",
     "description": "Lean device mirror for go-e Charger wallboxes: all relevant values of the official local HTTP API v2 as ioBroker states, readable and writable, without built-in charging logic",
     "author": {
         "name": "ben"
     },
-    "homepage": "https://github.com/BenZ-ITS/ioBroker.goe-wallbox",
+    "homepage": "https://github.com/BenZ-ITS/ioBroker.go-e-wallbox",
     "license": "MIT",
     "keywords": [
         "ioBroker",
@@ -17,10 +17,10 @@
     ],
     "repository": {
         "type": "git",
-        "url": "git+https://github.com/BenZ-ITS/ioBroker.goe-wallbox.git"
+        "url": "git+https://github.com/BenZ-ITS/ioBroker.go-e-wallbox.git"
     },
     "bugs": {
-        "url": "https://github.com/BenZ-ITS/ioBroker.goe-wallbox/issues"
+        "url": "https://github.com/BenZ-ITS/ioBroker.go-e-wallbox/issues"
     },
     "engines": {
         "node": ">=22"

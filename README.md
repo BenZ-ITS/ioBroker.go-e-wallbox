@@ -1,6 +1,6 @@
-![Logo](admin/goe-wallbox.png)
+![Logo](admin/go-e-wallbox.png)
 
-# ioBroker.goe-wallbox
+# ioBroker.go-e-wallbox
 
 **English** · [Deutsch](docs/de/README.md)
 
@@ -38,18 +38,18 @@ host name.
 
 ### 2. Install the adapter
 
-Open **Adapters** in the admin interface, search for **goe-wallbox** and install it. Leave "Create instance" checked.
+Open **Adapters** in the admin interface, search for **go-e-wallbox** and install it. Leave "Create instance" checked.
 
 The adapter is not listed in the ioBroker adapter repository yet. Until it is, and for test versions, install it from
 a package file as described in [docs/DEVELOPMENT.md](docs/DEVELOPMENT.md#installing-a-package-file).
 
 ### 3. Configure the instance
 
-1. Open **Instances** and the settings of `goe-wallbox.0`.
+1. Open **Instances** and the settings of `go-e-wallbox.0`.
 2. Add one row per wallbox with its IP address or host name.
 3. Recommended for the first start: check **Read-only mode**. The adapter then only reads.
 4. Save. The log shows `connected` for every wallbox, and the states appear below
-   `goe-wallbox.0.<serial number>`.
+   `go-e-wallbox.0.<serial number>`.
 5. To control the wallbox through the states, switch the read-only mode off again.
 
 If a wallbox cannot be reached, the log names the reason. `HTTP 404` means that the local HTTP API v2 is not
@@ -62,7 +62,7 @@ Update the adapter on the **Adapters** page. Instance and settings are kept.
 ### Uninstall
 
 Delete the instance on the **Instances** page and then the adapter on the **Adapters** page, or run
-`iobroker del goe-wallbox` on the host.
+`iobroker del go-e-wallbox` on the host.
 
 ## Configuration
 
@@ -76,7 +76,7 @@ Delete the instance on the **Instances** page and then the adapter on the **Adap
 
 ## States
 
-Each wallbox gets a device named after its serial number: `goe-wallbox.0.<serial>.…`.
+Each wallbox gets a device named after its serial number: `go-e-wallbox.0.<serial>.…`.
 A state is only created if the firmware actually delivers the underlying key.
 
 | State                        | API key       | Write | Meaning                                                                    |
@@ -146,6 +146,12 @@ Architecture, conventions and the release procedure are described in [docs/DEVEL
     Placeholder for the next version (at the beginning of the line):
     ### **WORK IN PROGRESS**
 -->
+
+### **WORK IN PROGRESS**
+
+- (breaking) The adapter is renamed from `goe-wallbox` to `go-e-wallbox` (package `iobroker.go-e-wallbox`, states
+  below `go-e-wallbox.0`). An installation of `goe-wallbox` is not updated: install `go-e-wallbox`, enter the
+  wallboxes again and adjust scripts and visualisations to the new state ids, then remove `goe-wallbox`
 
 ### 0.1.1
 

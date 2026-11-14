@@ -1,6 +1,6 @@
 {
     "common": {
-        "name": "goe-wallbox",
+        "name": "go-e-wallbox",
         "version": "0.1.1",
         "news": {
             "0.1.1": {
@@ -27,10 +27,10 @@
             "license": "MIT"
         },
         "platform": "Javascript/Node.js",
-        "icon": "goe-wallbox.png",
+        "icon": "go-e-wallbox.png",
         "enabled": true,
-        "extIcon": "https://raw.githubusercontent.com/BenZ-ITS/ioBroker.goe-wallbox/main/admin/goe-wallbox.png",
-        "readme": "https://github.com/BenZ-ITS/ioBroker.goe-wallbox/blob/main/README.md",
+        "extIcon": "https://raw.githubusercontent.com/BenZ-ITS/ioBroker.go-e-wallbox/main/admin/go-e-wallbox.png",
+        "readme": "https://github.com/BenZ-ITS/ioBroker.go-e-wallbox/blob/main/README.md",
         "loglevel": "info",
         "tier": 2,
         "mode": "daemon",

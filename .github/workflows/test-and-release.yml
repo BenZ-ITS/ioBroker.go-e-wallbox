@@ -94,5 +94,5 @@ jobs:
                   GH_TOKEN: ${{ github.token }}
               run: |
                   version="${GITHUB_REF_NAME#v}"
-                  gh release upload "$GITHUB_REF_NAME" "iobroker.goe-wallbox-$version.tgz" --clobber
+                  gh release upload "$GITHUB_REF_NAME" "iobroker.go-e-wallbox-$version.tgz" --clobber
                   gh release edit "$GITHUB_REF_NAME" --title "$version" --notes-file "docs/release-notes/$version.md"

@@ -2,7 +2,7 @@
 
 ## Goal and scope
 
-`goe-wallbox` mirrors a go-e Charger into ioBroker states. It contains no charging logic and is meant to stay that
+`go-e-wallbox` mirrors a go-e Charger into ioBroker states. It contains no charging logic and is meant to stay that
 way: no surplus control, no schedules, no assumptions about what the user wants the wallbox to do.
 
 The only source for the behaviour of the wallbox is the
@@ -72,12 +72,12 @@ Before the adapter is listed in the ioBroker repository, and for test versions, 
 (`.tgz`). Installing directly from the GitHub repository URL does **not** work: the repository contains only the
 TypeScript sources, the compiled code is part of the package file.
 
-1. Download `iobroker.goe-wallbox-<version>.tgz` from the releases of this repository, or build it on any computer
+1. Download `iobroker.go-e-wallbox-<version>.tgz` from the releases of this repository, or build it on any computer
    with Node.js 22 or newer:
 
     ```bash
-    git clone https://github.com/BenZ-ITS/ioBroker.goe-wallbox.git
-    cd ioBroker.goe-wallbox
+    git clone https://github.com/BenZ-ITS/ioBroker.go-e-wallbox.git
+    cd ioBroker.go-e-wallbox
     npm ci
     npm run build
     npm pack
@@ -97,8 +97,8 @@ TypeScript sources, the compiled code is part of the package file.
 On the command line of the ioBroker host:
 
 ```bash
-iobroker url /path/to/iobroker.goe-wallbox-<version>.tgz
-iobroker add goe-wallbox
+iobroker url /path/to/iobroker.go-e-wallbox-<version>.tgz
+iobroker add go-e-wallbox
 ```
 
 A newer package file is installed the same way; instance and settings are kept.
@@ -162,16 +162,16 @@ the [adapter checker](https://adapter-check.iobroker.in/) tests them. Check both
    `npm login`, then `npm publish` from a clean checkout of the latest release tag after `npm ci && npm run build`.
    The `deploy` job of that tag fails until then; this is expected.
 3. On npmjs.com: package → **Settings → Trusted publishers → GitHub Actions**, owner `BenZ-ITS`, repository
-   `ioBroker.goe-wallbox`, workflow `test-and-release.yml`, no environment. From then on the `deploy` job publishes
+   `ioBroker.go-e-wallbox`, workflow `test-and-release.yml`, no environment. From then on the `deploy` job publishes
    without a token.
-4. Add the ioBroker organisation as owner: `npm owner add bluefox iobroker.goe-wallbox`. The invitation has to be
+4. Add the ioBroker organisation as owner: `npm owner add bluefox iobroker.go-e-wallbox`. The invitation has to be
    accepted, which can take a day or two.
 5. Run the adapter checker and fix all errors.
 6. Add the adapter to the **latest** (beta) repository: on [iobroker.dev](https://www.iobroker.dev) log in with
    GitHub, open the adapter, **manage → ADD TO LATEST**; or fork `ioBroker/ioBroker.repositories` and run
-   `npm run addToLatest -- --name goe-wallbox --type energy`, then open a pull request.
+   `npm run addToLatest -- --name go-e-wallbox --type energy`, then open a pull request.
 7. For **stable**: open a test thread in the ioBroker forum, collect feedback, then
-   `npm run addToStable -- --name goe-wallbox --version <version>` in the fork and open a pull request.
+   `npm run addToStable -- --name go-e-wallbox --version <version>` in the fork and open a pull request.
 
 ## Continuous integration
 

@@ -1,6 +1,6 @@
-![Logo](../../admin/goe-wallbox.png)
+![Logo](../../admin/go-e-wallbox.png)
 
-# ioBroker.goe-wallbox
+# ioBroker.go-e-wallbox
 
 [English](../../README.md) · **Deutsch**
 
@@ -40,13 +40,13 @@ Hostnamen verwenden.
 
 ### 2. Adapter installieren
 
-In der Admin-Oberfläche **Adapter** öffnen, nach **goe-wallbox** suchen und installieren. „Instanz erstellen“
+In der Admin-Oberfläche **Adapter** öffnen, nach **go-e-wallbox** suchen und installieren. „Instanz erstellen“
 angehakt lassen.
 
 Der Adapter ist noch nicht im ioBroker-Adapterverzeichnis gelistet. Bis dahin, und für Testversionen, wird er aus
 einer Paketdatei (`.tgz`) installiert:
 
-1. Die Paketdatei `iobroker.goe-wallbox-<Version>.tgz` aus den Releases dieses Repos laden. Die Datei nicht
+1. Die Paketdatei `iobroker.go-e-wallbox-<Version>.tgz` aus den Releases dieses Repos laden. Die Datei nicht
    umbenennen: ioBroker leitet den Adapternamen aus dem Dateinamen ab. Selbst bauen lässt sie sich wie in
    [docs/DEVELOPMENT.md](../DEVELOPMENT.md#installing-a-package-file) beschrieben.
 2. **Adapter** öffnen und den **Expertenmodus** einschalten (Kopf-Symbol unten im Seitenmenü). Er gilt nur für die
@@ -61,8 +61,8 @@ einer Paketdatei (`.tgz`) installiert:
 Auf der Kommandozeile des ioBroker-Hosts geht dasselbe mit:
 
 ```bash
-iobroker url /pfad/zu/iobroker.goe-wallbox-<Version>.tgz
-iobroker add goe-wallbox
+iobroker url /pfad/zu/iobroker.go-e-wallbox-<Version>.tgz
+iobroker add go-e-wallbox
 ```
 
 Die Installation direkt über die Adresse des GitHub-Repos funktioniert **nicht**: Das Repo enthält nur die
@@ -70,11 +70,11 @@ TypeScript-Quellen, der übersetzte Code steckt in der Paketdatei.
 
 ### 3. Instanz einrichten
 
-1. **Instanzen** öffnen und die Einstellungen von `goe-wallbox.0` aufrufen.
+1. **Instanzen** öffnen und die Einstellungen von `go-e-wallbox.0` aufrufen.
 2. Je Wallbox eine Zeile mit IP-Adresse oder Hostname anlegen.
 3. Für den ersten Start empfohlen: **Nur-Lesen-Modus** anhaken. Der Adapter liest dann nur.
 4. Speichern. Im Log steht für jede Wallbox `connected`, und die Datenpunkte erscheinen unter
-   `goe-wallbox.0.<Seriennummer>`.
+   `go-e-wallbox.0.<Seriennummer>`.
 5. Um die Wallbox über die Datenpunkte zu steuern, den Nur-Lesen-Modus wieder ausschalten.
 
 Ist eine Wallbox nicht erreichbar, nennt das Log den Grund. `HTTP 404` bedeutet, dass die lokale HTTP-API v2 nicht
@@ -88,7 +88,7 @@ neueren Version auf demselben Weg installieren. Instanz und Einstellungen bleibe
 ### Deinstallieren
 
 Die Instanz auf der Seite **Instanzen** löschen und danach den Adapter auf der Seite **Adapter**, oder auf dem Host
-`iobroker del goe-wallbox` ausführen.
+`iobroker del go-e-wallbox` ausführen.
 
 ## Konfiguration
 
@@ -102,7 +102,7 @@ Die Instanz auf der Seite **Instanzen** löschen und danach den Adapter auf der 
 
 ## Datenpunkte
 
-Jede Wallbox bekommt ein Gerät, das nach ihrer Seriennummer benannt ist: `goe-wallbox.0.<Seriennummer>.…`.
+Jede Wallbox bekommt ein Gerät, das nach ihrer Seriennummer benannt ist: `go-e-wallbox.0.<Seriennummer>.…`.
 Ein Datenpunkt wird nur angelegt, wenn die Firmware den zugehörigen Schlüssel tatsächlich liefert.
 
 | Datenpunkt                   | API-Schlüssel | Schreibbar | Bedeutung                                                                       |
