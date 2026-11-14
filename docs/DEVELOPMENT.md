@@ -176,10 +176,9 @@ the [adapter checker](https://adapter-check.iobroker.in/) tests them. Check both
 ## Continuous integration
 
 `.github/workflows/test-and-release.yml` uses the shared ioBroker actions. `check-and-lint` runs type check, lint and
-package tests; `adapter-tests` runs unit and integration tests on Node.js 22, 24 and 26. For version tags `deploy`
-publishes to npm with trusted publishing (no npm token) and creates the GitHub release; `release-notes` completes it.
-Both use the token GitHub Actions provides and need no secret. While the repository is private only Linux runners
-are used; the comment in the workflow explains how to switch the other systems back on before publishing.
+package tests; `adapter-tests` runs unit and integration tests on Node.js 22, 24 and 26 under Linux, Windows and
+macOS. For version tags `deploy` publishes to npm with trusted publishing (no npm token) and creates the GitHub
+release; `release-notes` completes it. Both use the token GitHub Actions provides and need no secret.
 
 Dependabot (`.github/dependabot.yml`) proposes updates once a month, at the earliest seven days after a version was
 published. Major updates of `@types/node` and `typescript` are ignored on purpose.
