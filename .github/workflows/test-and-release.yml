@@ -70,6 +70,9 @@ jobs:
                   node-version: '24.x'
                   build: true
                   github-token: ${{ secrets.GITHUB_TOKEN }}
+                  # TEMPORARY: only for the very first npm publication. Trusted publishing can only be set up
+                  # for a package that exists. Remove this line and the NPM_TOKEN secret afterwards.
+                  npm-token: ${{ secrets.NPM_TOKEN }}
 
     # Attaches the package file to the release and replaces its text with the bilingual release notes
     release-notes:
