@@ -146,8 +146,7 @@ Architecture, conventions and the release procedure are described in [docs/DEVEL
     Placeholder for the next version (at the beginning of the line):
     ### **WORK IN PROGRESS**
 -->
-
-### **WORK IN PROGRESS**
+### 0.1.3 (2026-11-14)
 
 - Settings page, title and description in all languages of ioBroker
 - Requires admin 7.6.20 or newer
