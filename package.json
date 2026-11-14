@@ -43,12 +43,17 @@
         "test:unit": "npm run build && mocha \"build/**/*.test.js\"",
         "test:package": "mocha test/package.js --exit",
         "test:integration": "npm run build && mocha test/integration.js --exit",
-        "test": "npm run test:unit && npm run test:package"
+        "test": "npm run test:unit && npm run test:package",
+        "release": "release-script"
     },
     "dependencies": {
         "@iobroker/adapter-core": "^3.4.3"
     },
     "devDependencies": {
+        "@alcalzone/release-script": "^5.2.1",
+        "@alcalzone/release-script-plugin-iobroker": "^5.2.0",
+        "@alcalzone/release-script-plugin-license": "^5.2.2",
+        "@alcalzone/release-script-plugin-manual-review": "^5.2.0",
         "@iobroker/eslint-config": "^2.3.4",
         "@iobroker/testing": "^6.3.2",
         "@iobroker/types": "^7.2.5",

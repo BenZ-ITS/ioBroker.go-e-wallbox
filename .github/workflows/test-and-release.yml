@@ -1,108 +1,98 @@
-name: Test
+name: Test and Release
 
+# Runs on every push to main and on pull requests, and on version tags to publish a release
 on:
     push:
         branches: [main]
-        tags: ['v[0-9]+.[0-9]+.[0-9]+', 'v[0-9]+.[0-9]+.[0-9]+-**']
+        tags:
+            # normal versions
+            - 'v[0-9]+.[0-9]+.[0-9]+'
+            # pre-releases
+            - 'v[0-9]+.[0-9]+.[0-9]+-**'
     pull_request: {}
-    # Releases a tag that already exists (Actions → Test → Run workflow)
-    workflow_dispatch:
-        inputs:
-            tag:
-                description: 'Existing version tag, e.g. v0.1.1'
-                required: true
-                type: string
 
+# Cancel previous runs for the same branch or tag when a new commit is pushed
 concurrency:
-    group: ${{ github.workflow }}-${{ inputs.tag || github.ref }}
+    group: ${{ github.ref }}
     cancel-in-progress: true
 
 permissions:
     contents: read
 
 jobs:
+    # Type check, lint and package tests
     check-and-lint:
+        if: contains(github.event.head_commit.message, '[skip ci]') == false
         runs-on: ubuntu-latest
         steps:
-            - uses: actions/checkout@v4
+            - uses: ioBroker/testing-action-check@v2
               with:
-                  ref: ${{ inputs.tag || github.ref }}
-            - uses: actions/setup-node@v4
-              with:
-                  node-version: 22.x
-                  cache: npm
-            - run: npm ci
-            - run: npm run check
-            - run: npm run lint
-            - run: npm test
+                  node-version: '22.x'
+                  type-checking: true
+                  lint: true
+            # For version tags: versions agree and the release notes exist, before any expensive step
+            - name: Check release metadata
+              if: startsWith(github.ref, 'refs/tags/v')
+              run: node scripts/check-release.mjs "$GITHUB_REF_NAME"
 
+    # Unit and integration tests on all supported Node.js versions
     adapter-tests:
         needs: check-and-lint
+        if: contains(github.event.head_commit.message, '[skip ci]') == false
         runs-on: ${{ matrix.os }}
         strategy:
             matrix:
-                node-version: [22.x, 24.x]
+                node-version: [22.x, 24.x, 26.x]
                 # While the repository is private only Linux is tested: Windows and macOS runners
                 # count 2x and 10x against the free Actions minutes. Before publishing switch back to
-                # [ubuntu-latest, windows-latest, macos-latest] – public repositories are free.
+                # [ubuntu-latest, windows-latest, macos-latest] – public repositories are free, and the
+                # ioBroker repository checker requires all three systems.
                 os: [ubuntu-latest]
         steps:
-            - uses: actions/checkout@v4
-              with:
-                  ref: ${{ inputs.tag || github.ref }}
-            - uses: actions/setup-node@v4
+            - uses: ioBroker/testing-action-adapter@v1
               with:
                   node-version: ${{ matrix.node-version }}
-                  cache: npm
-            - run: npm ci
-            - run: npm run test:integration
+                  os: ${{ matrix.os }}
+                  build: true
 
-    # Creates the GitHub release with the package file once all tests passed for a version tag.
-    release:
-        needs: adapter-tests
-        if: startsWith(github.ref, 'refs/tags/v') || github.event_name == 'workflow_dispatch'
+    # Publishes the package to npm (trusted publishing, no token) and creates the GitHub release
+    deploy:
+        needs: [check-and-lint, adapter-tests]
+        if: |
+            contains(github.event.head_commit.message, '[skip ci]') == false &&
+            github.event_name == 'push' &&
+            startsWith(github.ref, 'refs/tags/v')
+        runs-on: ubuntu-latest
+        # id-token: npm trusted publishing; contents: GitHub release
+        permissions:
+            id-token: write
+            contents: write
+        steps:
+            - uses: ioBroker/testing-action-deploy@v1
+              with:
+                  node-version: '24.x'
+                  build: true
+                  github-token: ${{ secrets.GITHUB_TOKEN }}
+
+    # Attaches the package file to the release and replaces its text with the bilingual release notes
+    release-notes:
+        needs: deploy
         runs-on: ubuntu-latest
         permissions:
             contents: write
-        env:
-            TAG: ${{ inputs.tag || github.ref_name }}
         steps:
-            - uses: actions/checkout@v4
+            - uses: actions/checkout@v6
+            - uses: actions/setup-node@v6
               with:
-                  ref: ${{ inputs.tag || github.ref }}
-            - uses: actions/setup-node@v4
-              with:
-                  node-version: 22.x
+                  node-version: 24.x
                   cache: npm
             - run: npm ci
-            - name: Check that tag, package.json and io-package.json agree
-              run: |
-                  version=$(node -p "require('./package.json').version")
-                  io_version=$(node -p "require('./io-package.json').common.version")
-                  if [ "$TAG" != "v$version" ] || [ "$io_version" != "$version" ]; then
-                      echo "::error::tag $TAG, package.json $version and io-package.json $io_version do not match"
-                      exit 1
-                  fi
-                  echo "VERSION=$version" >> "$GITHUB_ENV"
             - run: npm run build
             - run: npm pack
-            - name: Check release notes (docs/release-notes/<version>.md, English and German)
-              run: |
-                  notes="docs/release-notes/$VERSION.md"
-                  if [ ! -f "$notes" ] || ! grep -q '^## English' "$notes" || ! grep -q '^## Deutsch' "$notes"; then
-                      echo "::error::$notes is missing or lacks the sections '## English' and '## Deutsch'"
-                      exit 1
-                  fi
-                  node -e '
-                      const news = require("./io-package.json").common.news[process.argv[1]];
-                      if (!news?.en || !news?.de) {
-                          console.error("common.news has no English and German entry for " + process.argv[1]);
-                          process.exit(1);
-                      }
-                  ' "$VERSION"
-            - name: Create release
+            - name: Update GitHub release
               env:
                   GH_TOKEN: ${{ github.token }}
-              run: >-
-                  gh release create "$TAG" "iobroker.goe-wallbox-$VERSION.tgz"
-                  --title "$VERSION" --notes-file "docs/release-notes/$VERSION.md" --verify-tag
+              run: |
+                  version="${GITHUB_REF_NAME#v}"
+                  gh release upload "$GITHUB_REF_NAME" "iobroker.goe-wallbox-$version.tgz" --clobber
+                  gh release edit "$GITHUB_REF_NAME" --title "$version" --notes-file "docs/release-notes/$version.md"

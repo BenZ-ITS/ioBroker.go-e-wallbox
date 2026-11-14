@@ -1,0 +1,30 @@
+version: 2
+updates:
+    - package-ecosystem: npm
+      directory: '/'
+      schedule:
+          # monthly, on the 7th at 00:05
+          interval: cron
+          cronjob: '5 0 7 * *'
+          timezone: Europe/Berlin
+      # Wait a week before proposing a new version (supply chain safety)
+      cooldown:
+          default-days: 7
+      open-pull-requests-limit: 15
+      versioning-strategy: increase
+      ignore:
+          # Node.js types follow the minimum supported Node.js version (engines.node)
+          - dependency-name: '@types/node'
+            update-types: ['version-update:semver-major']
+          # TypeScript stays on 5.x until the ioBroker lint rules support a newer major
+          - dependency-name: 'typescript'
+            update-types: ['version-update:semver-major']
+
+    - package-ecosystem: github-actions
+      directory: '/'
+      schedule:
+          # monthly, on the 7th at 00:05
+          interval: cron
+          cronjob: '5 0 7 * *'
+          timezone: Europe/Berlin
+      open-pull-requests-limit: 15

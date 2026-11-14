@@ -33,56 +33,42 @@ Unterstützung für die ältere API v1 (ältere Hardware) ist geplant; die Struk
 
 ## Installation
 
-Der Adapter ist noch nicht auf npm veröffentlicht und noch nicht im ioBroker-Adapterverzeichnis gelistet. Er erscheint
-deshalb nicht in der Adapterliste der Admin-Oberfläche. Bis dahin wird er aus einer Paketdatei (`.tgz`) installiert.
-
-Die Installation direkt über die Adresse des GitHub-Repos funktioniert **nicht**: Das Repo enthält nur die
-TypeScript-Quellen, der übersetzte Code steckt in der Paketdatei.
-
 ### 1. Wallbox vorbereiten
 
 In der go-e-App die **lokale HTTP-API v2** einschalten. Der Wallbox im Router eine feste IP-Adresse geben oder ihren
 Hostnamen verwenden.
 
-### 2. Paketdatei besorgen
+### 2. Adapter installieren
 
-Entweder `iobroker.goe-wallbox-<Version>.tgz` aus den Releases dieses Repos laden oder sie auf einem beliebigen
-Rechner mit Node.js 22 oder neuer selbst bauen:
+In der Admin-Oberfläche **Adapter** öffnen, nach **goe-wallbox** suchen und installieren. „Instanz erstellen“
+angehakt lassen.
 
-```bash
-git clone https://github.com/BenZ-ITS/ioBroker.goe-wallbox.git
-cd ioBroker.goe-wallbox
-npm ci
-npm run build
-npm pack
-```
+Der Adapter ist noch nicht im ioBroker-Adapterverzeichnis gelistet. Bis dahin, und für Testversionen, wird er aus
+einer Paketdatei (`.tgz`) installiert:
 
-`npm pack` legt `iobroker.goe-wallbox-<Version>.tgz` im Projektordner ab. Die Datei nicht umbenennen: ioBroker leitet
-den Adapternamen aus dem Dateinamen ab.
-
-### 3. Paket installieren
-
-**In der Admin-Oberfläche**
-
-1. **Adapter** öffnen.
-2. Den **Expertenmodus** einschalten (Kopf-Symbol unten im Seitenmenü). Er gilt nur für die aktuelle Browsersitzung.
-3. In der Leiste auf das **GitHub-Symbol** klicken („Installieren aus eigener URL“).
-4. Einen dieser Reiter wählen:
+1. Die Paketdatei `iobroker.goe-wallbox-<Version>.tgz` aus den Releases dieses Repos laden. Die Datei nicht
+   umbenennen: ioBroker leitet den Adapternamen aus dem Dateinamen ab. Selbst bauen lässt sie sich wie in
+   [docs/DEVELOPMENT.md](../DEVELOPMENT.md#installing-a-package-file) beschrieben.
+2. **Adapter** öffnen und den **Expertenmodus** einschalten (Kopf-Symbol unten im Seitenmenü). Er gilt nur für die
+   aktuelle Browsersitzung.
+3. In der Leiste auf das **GitHub-Symbol** klicken („Installieren aus eigener URL“) und einen dieser Reiter wählen:
     - **Aus Datei**: die `.tgz` auf dem eigenen Rechner auswählen.
     - **Benutzerdefiniert**: eine Adresse der `.tgz` eintragen, die der ioBroker-Host erreichen kann, oder den Pfad
       der Datei auf dem ioBroker-Host.
-5. „Instanz erstellen, wenn noch keine existiert“ angehakt lassen und **Installieren** klicken.
+4. „Instanz erstellen, wenn noch keine existiert“ angehakt lassen und **Installieren** klicken. Die rote Warnung im
+   Dialog erscheint bei jeder Installation außerhalb des offiziellen Verzeichnisses.
 
-Die rote Warnung im Dialog erscheint bei jeder Installation außerhalb des offiziellen Verzeichnisses.
-
-**Auf der Kommandozeile des ioBroker-Hosts**
+Auf der Kommandozeile des ioBroker-Hosts geht dasselbe mit:
 
 ```bash
 iobroker url /pfad/zu/iobroker.goe-wallbox-<Version>.tgz
 iobroker add goe-wallbox
 ```
 
-### 4. Instanz einrichten
+Die Installation direkt über die Adresse des GitHub-Repos funktioniert **nicht**: Das Repo enthält nur die
+TypeScript-Quellen, der übersetzte Code steckt in der Paketdatei.
+
+### 3. Instanz einrichten
 
 1. **Instanzen** öffnen und die Einstellungen von `goe-wallbox.0` aufrufen.
 2. Je Wallbox eine Zeile mit IP-Adresse oder Hostname anlegen.
@@ -96,7 +82,8 @@ eingeschaltet ist.
 
 ### Aktualisieren
 
-Die Paketdatei der neueren Version auf demselben Weg installieren. Instanz und Einstellungen bleiben erhalten.
+Den Adapter auf der Seite **Adapter** aktualisieren; bei einer Installation aus einer Paketdatei die Paketdatei der
+neueren Version auf demselben Weg installieren. Instanz und Einstellungen bleiben erhalten.
 
 ### Deinstallieren
 

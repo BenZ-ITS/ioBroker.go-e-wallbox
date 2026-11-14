@@ -21,6 +21,7 @@ The adapter is written from scratch; code of other adapters is not used as a tem
 | `admin/jsonConfig.json`      | Instance settings; texts in `admin/i18n/<lang>/translations.json`                    |
 | `test/package.js`            | Validation of `package.json` and `io-package.json`                                   |
 | `test/integration.js`        | Starts the adapter in a real js-controller                                           |
+| `scripts/check-release.mjs`  | Checks versions, news and release notes before a release                             |
 | `docs/de/README.md`          | German readme; keep it in step with `README.md`                                      |
 
 ## How it works
@@ -65,26 +66,65 @@ npm test
 `npm run test:integration` downloads a js-controller and takes about a minute; run it before a release and after
 changes to `main.ts` or `io-package.json`.
 
-## Building a package and releasing
+## Installing a package file
+
+Before the adapter is listed in the ioBroker repository, and for test versions, it is installed from a package file
+(`.tgz`). Installing directly from the GitHub repository URL does **not** work: the repository contains only the
+TypeScript sources, the compiled code is part of the package file.
+
+1. Download `iobroker.goe-wallbox-<version>.tgz` from the releases of this repository, or build it on any computer
+   with Node.js 22 or newer:
+
+    ```bash
+    git clone https://github.com/BenZ-ITS/ioBroker.goe-wallbox.git
+    cd ioBroker.goe-wallbox
+    npm ci
+    npm run build
+    npm pack
+    ```
+
+    Do not rename the file: ioBroker derives the adapter name from the file name.
+
+2. In the admin interface open **Adapters** and switch on the **expert mode** (head icon at the bottom of the side
+   menu; it only applies to the current browser session).
+3. Click the **GitHub icon** in the toolbar and choose one of these tabs:
+    - **From file**: select the `.tgz` on your computer.
+    - **Custom**: enter a URL of the `.tgz` that the ioBroker host can reach, or the path of the file on the ioBroker
+      host.
+4. Leave "Create instance if it does not exist yet" checked and click **Install**. The red warning in the dialog is
+   shown for every installation from outside the official repository.
+
+On the command line of the ioBroker host:
 
 ```bash
-npm run build
-npm pack
+iobroker url /path/to/iobroker.goe-wallbox-<version>.tgz
+iobroker add goe-wallbox
 ```
 
-For a release:
+A newer package file is installed the same way; instance and settings are kept.
 
-1. Raise the version in `package.json` and `io-package.json` (`common.version`) and add an entry to `common.news`
-   and to the changelog in `README.md`.
-2. Write the release notes in `docs/release-notes/<version>.md` (see below).
-3. Run all checks including the integration test.
-4. Commit, tag `v<version>`, push both: `git push origin main v<version>`.
+## Releasing
 
-The workflow then runs all tests for the tag and creates the GitHub release itself: it checks that the tag,
-`package.json` and `io-package.json` carry the same version and that the release notes exist, attaches the `.tgz`
-from `npm pack` and uses the release notes as the text of the release. Without release notes no release is created.
-For a tag that was pushed without a release, start the workflow by hand under **Actions → Test → Run workflow** and
-enter the tag.
+Releases are made with the [release script](https://github.com/AlCalzone/release-script) (`.releaseconfig.json`,
+plugins `iobroker`, `license` and `manual-review`). The GitHub workflow then tests the tag, publishes the package to
+npm and creates the GitHub release.
+
+1. Below the placeholder `### **WORK IN PROGRESS**` in the changelog of `README.md` add one line per change
+   (`- …`). The release script turns these lines into the changelog entry and into `common.news` of
+   `io-package.json`, translated into all ioBroker languages.
+2. Write the release notes in `docs/release-notes/<new version>.md` (see below).
+3. Commit both. The working tree must be clean; run all checks including the integration test.
+4. Run `npm run release patch` (or `minor`, `major`). The script raises the version in `package.json` and
+   `io-package.json`, updates changelog and news, and pauses for a review: check the German news text and correct
+   it if needed. Before committing it builds the adapter and runs `scripts/check-release.mjs` (same version
+   everywhere, English and German news, release notes present). It then commits, tags `v<version>` and pushes both.
+   `npm run release patch -- --dry` shows what would happen without changing anything.
+5. The workflow runs all tests for the tag, checks the release metadata again, publishes to npm (`deploy` job) and
+   creates the GitHub release. The job `release-notes` attaches the `.tgz` from `npm pack` and replaces the text of
+   the release with the release notes.
+
+If a release step fails after the tag was pushed, fix the cause, delete the tag (`git push origin :refs/tags/v<version>`
+and `git tag -d v<version>`) and release a new patch version rather than moving the tag.
 
 ### Release notes
 
@@ -111,16 +151,38 @@ are the full description.
 ### Hintergrund
 ```
 
-Publishing to npm and an entry in the ioBroker adapter repository are not set up yet. Both require the repository to
-be public; see the ioBroker developer documentation for the current requirements (adapter checker, test matrix,
-translations).
+## Publishing in the ioBroker repository
+
+The requirements are listed in [ioBroker.repositories](https://github.com/ioBroker/ioBroker.repositories#readme);
+the [adapter checker](https://adapter-check.iobroker.in/) tests them. Check both again before each step, they change.
+
+1. The repository is public, has a description and topics (GitHub: settings button beside "About"), and the test
+   matrix in the workflow covers Linux, Windows and macOS.
+2. First publication on npm, by hand, because trusted publishing can only be configured for an existing package:
+   `npm login`, then `npm publish` from a clean checkout of the latest release tag after `npm ci && npm run build`.
+   The `deploy` job of that tag fails until then; this is expected.
+3. On npmjs.com: package → **Settings → Trusted publishers → GitHub Actions**, owner `BenZ-ITS`, repository
+   `ioBroker.goe-wallbox`, workflow `test-and-release.yml`, no environment. From then on the `deploy` job publishes
+   without a token.
+4. Add the ioBroker organisation as owner: `npm owner add bluefox iobroker.goe-wallbox`. The invitation has to be
+   accepted, which can take a day or two.
+5. Run the adapter checker and fix all errors.
+6. Add the adapter to the **latest** (beta) repository: on [iobroker.dev](https://www.iobroker.dev) log in with
+   GitHub, open the adapter, **manage → ADD TO LATEST**; or fork `ioBroker/ioBroker.repositories` and run
+   `npm run addToLatest -- --name goe-wallbox --type energy`, then open a pull request.
+7. For **stable**: open a test thread in the ioBroker forum, collect feedback, then
+   `npm run addToStable -- --name goe-wallbox --version <version>` in the fork and open a pull request.
 
 ## Continuous integration
 
-`.github/workflows/test-and-release.yml` runs type check, lint, unit and package tests, then the integration test on
-Node.js 22 and 24. For version tags it then creates the GitHub release (see above); this job uses the token that
-GitHub Actions provides and needs no secret. While the repository is private only Linux runners are used; the comment in the workflow explains
-how to switch the other systems back on before publishing.
+`.github/workflows/test-and-release.yml` uses the shared ioBroker actions. `check-and-lint` runs type check, lint and
+package tests; `adapter-tests` runs unit and integration tests on Node.js 22, 24 and 26. For version tags `deploy`
+publishes to npm with trusted publishing (no npm token) and creates the GitHub release; `release-notes` completes it.
+Both use the token GitHub Actions provides and need no secret. While the repository is private only Linux runners
+are used; the comment in the workflow explains how to switch the other systems back on before publishing.
+
+Dependabot (`.github/dependabot.yml`) proposes updates once a month, at the earliest seven days after a version was
+published. Major updates of `@types/node` and `typescript` are ignored on purpose.
 
 ## Known gaps
 
