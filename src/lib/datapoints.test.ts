@@ -32,7 +32,28 @@ describe('datapoints', () => {
         const ids = DATAPOINTS.map(candidate => candidate.id);
         assert.equal(new Set(ids).size, ids.length);
         for (const id of ids) {
-            assert.ok(id.split('.')[0] in CHANNELS, `${id} is in a known channel`);
+            assert.ok(CHANNELS.includes(id.split('.')[0]), `${id} is in a known channel`);
+        }
+    });
+
+    it('combine roles with matching type and write flag', () => {
+        for (const { id, role, type, write } of DATAPOINTS) {
+            const writable = !!write;
+            if (role.startsWith('info.') || role.startsWith('value') || role.startsWith('indicator')) {
+                assert.equal(writable, false, `${id}: ${role} must be read-only`);
+            }
+            if (role.startsWith('level') || role.startsWith('switch')) {
+                assert.equal(writable, true, `${id}: ${role} must be writable`);
+            }
+            if (role.startsWith('info.')) {
+                assert.equal(type, 'string', `${id}: ${role} must be a string`);
+            }
+            if (role.startsWith('indicator') || role.startsWith('switch')) {
+                assert.equal(type, 'boolean', `${id}: ${role} must be a boolean`);
+            }
+            if (role.startsWith('value') || role.startsWith('level')) {
+                assert.equal(type, 'number', `${id}: ${role} must be a number`);
+            }
         }
     });
 
@@ -44,8 +65,19 @@ describe('datapoints', () => {
         assert.equal(datapoint('info.uptime').read(STATUS), 223143);
     });
 
-    it('report null for values the wallbox sends as null', () => {
-        assert.equal(datapoint('charging.allowedCurrent').read(STATUS), null);
+    it('skip values the wallbox sends as null, so typed states never hold null', () => {
+        assert.equal(datapoint('charging.allowedCurrent').read(STATUS), undefined);
+        assert.equal(datapoint('pv.gridPower').read({ pgrid: null }), undefined);
+        assert.equal(datapoint('info.firmware').read({ fwv: null }), undefined);
+        assert.equal(datapoint('charging.allowed').read({ alw: null }), undefined);
+        assert.equal(datapoint('energy.voltageL1').read({ nrg: [null] }), undefined);
+    });
+
+    it('never produce null for any datapoint', () => {
+        const nulls = Object.fromEntries(DATAPOINTS.flatMap(candidate => candidate.keys).map(key => [key, null]));
+        for (const candidate of DATAPOINTS) {
+            assert.notEqual(candidate.read(nulls), null, candidate.id);
+        }
     });
 
     it('skip keys the firmware does not deliver', () => {
@@ -69,7 +101,7 @@ describe('datapoints', () => {
         assert.equal(connected.read({ car: 3 }), true);
         assert.equal(connected.read({ car: 4 }), true);
         assert.equal(connected.read({ car: 5 }), false);
-        assert.equal(connected.read({ car: null }), null);
+        assert.equal(connected.read({ car: null }), undefined);
     });
 
     it('map the energy limit: null <-> 0', () => {
@@ -109,9 +141,9 @@ describe('datapoints', () => {
         assert.equal(phases.read({ pha: [true, true, true, true, true, true], pnp: 0 }), 3);
         assert.equal(phases.read({ pha: [true, false, false, true, true, true], pnp: 0 }), 1);
         assert.equal(phases.read({ pha: [false, false, false, true, true, true], pnp: 0 }), 0);
-        assert.equal(phases.read({ pha: null }), null);
-        assert.equal(phases.read({ pha: [true, true] }), null);
-        assert.equal(phases.read({ pha: [1, 1, 1, 1, 1, 1] }), null);
+        assert.equal(phases.read({ pha: null }), undefined);
+        assert.equal(phases.read({ pha: [true, true] }), undefined);
+        assert.equal(phases.read({ pha: [1, 1, 1, 1, 1, 1] }), undefined);
         assert.equal(phases.read({ pnp: 3 }), undefined);
     });
 
@@ -133,6 +165,10 @@ describe('helpers', () => {
         assert.deepEqual(parseExtraKeys(' tpa, cdi;modelStatus  tpa'), ['tpa', 'cdi', 'modelStatus']);
         assert.deepEqual(parseExtraKeys('a&b=1, ../x, ok_1'), ['ok_1']);
         assert.deepEqual(parseExtraKeys(undefined), []);
+    });
+
+    it('keep additional keys that differ only in case once', () => {
+        assert.deepEqual(parseExtraKeys('tpa, TPA, Tpa, cdi'), ['tpa', 'cdi']);
     });
 
     it('turn structured values into JSON text', () => {

@@ -12,7 +12,7 @@ Wallbox tut, entscheidest du, deine eigenen Skripte oder die Wallbox selbst.
 
 Dies ist ein unabhängiges Projekt, von Grund auf neu geschrieben anhand der
 [offiziellen go-e-API-Dokumentation](https://github.com/goecharger/go-eCharger-API-v2). Es steht in keiner Verbindung
-zur go-e GmbH.
+zur go-e GmbH ([Website des Herstellers](https://go-e.com/de-de/)).
 
 ## Wofür er gedacht ist
 

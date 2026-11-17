@@ -4,7 +4,7 @@
 
 **English** · [Deutsch](docs/de/README.md)
 
-Lean device mirror for **go-e Charger** wallboxes.
+Lean device mirror for **go-e Charger** wallboxes ([manufacturer website](https://go-e.com/en/)).
 
 The adapter exposes the values of the official local HTTP API v2 as ioBroker states – readable and, where the API
 allows it, writable. It contains **no charging logic of its own**: no surplus control, no schedules. What the wallbox
@@ -149,6 +149,15 @@ Architecture, conventions and the release procedure are described in [docs/DEVEL
     Placeholder for the next version (at the beginning of the line):
     ### **WORK IN PROGRESS**
 -->
+### **WORK IN PROGRESS**
+
+- State and channel names in all languages of ioBroker
+- States are no longer set to `null` when the wallbox reports no value; they keep their last value and are only
+  created once the wallbox delivers one
+- `info.friendlyName` now has the role `text` (it is writable), `info.rssi` the role `value.rssi`
+- Additional API keys that differ only in upper/lower case are used once
+- Link to the manufacturer website in the readme
+
 ### 0.1.3 (2026-11-14)
 
 - Settings page, title and description in all languages of ioBroker

@@ -1,14 +1,7 @@
 import * as utils from '@iobroker/adapter-core';
-import {
-    CHANNELS,
-    DATAPOINTS,
-    collectKeys,
-    parseExtraKeys,
-    toRawStateValue,
-    type Datapoint,
-    type Translated,
-} from './lib/datapoints';
+import { DATAPOINTS, collectKeys, parseExtraKeys, toRawStateValue, type Datapoint } from './lib/datapoints';
 import { HttpV2Transport } from './lib/httpV2Transport';
+import { translatedName } from './lib/i18n';
 import type { ChargerStatus, ChargerTransport } from './lib/transport';
 
 /** Delay before re-reading after a write; the wallbox evaluates its logic once per second */
@@ -177,7 +170,7 @@ class GoEWallbox extends utils.Adapter {
         await this.extendObject(`${deviceId}.info.online`, {
             type: 'state',
             common: {
-                name: { en: 'Wallbox is reachable', de: 'Wallbox ist erreichbar' },
+                name: translatedName('info.online'),
                 type: 'boolean',
                 role: 'indicator.reachable',
                 read: true,
@@ -190,8 +183,11 @@ class GoEWallbox extends utils.Adapter {
     }
 
     private async ensureChannel(deviceId: string, channel: string): Promise<void> {
-        const name: Translated = CHANNELS[channel] ?? { en: channel, de: channel };
-        await this.extendObject(`${deviceId}.${channel}`, { type: 'channel', common: { name }, native: {} });
+        await this.extendObject(`${deviceId}.${channel}`, {
+            type: 'channel',
+            common: { name: translatedName(channel) },
+            native: {},
+        });
     }
 
     private async applyStatus(charger: Charger, status: ChargerStatus): Promise<void> {
@@ -202,7 +198,7 @@ class GoEWallbox extends utils.Adapter {
                 continue;
             }
             await this.updateState(charger, datapoint.id, value, () => ({
-                name: datapoint.name,
+                name: translatedName(datapoint.id),
                 type: datapoint.type,
                 role: datapoint.role,
                 read: true,

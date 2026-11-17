@@ -1,21 +1,11 @@
 import type { ChargerStatus } from './transport';
 
-/** Name in the languages the adapter ships */
-export interface Translated {
-    /** English */
-    en: string;
-    /** German */
-    de: string;
-}
-
 /** Description of one ioBroker state and how it maps to the wallbox API */
 export interface Datapoint {
     /** id below the device, e.g. `charging.forceState` */
     id: string;
     /** API keys this state is derived from */
     keys: readonly string[];
-    /** display name */
-    name: Translated;
     /** ioBroker value type */
     type: 'number' | 'string' | 'boolean';
     /** ioBroker role */
@@ -30,7 +20,8 @@ export interface Datapoint {
     states?: Record<number, string>;
     /**
      * Extracts the state value from a status.
-     * Returns `undefined` if the firmware did not deliver the key – the state is then not created.
+     * Returns `undefined` if the firmware did not deliver the key or no usable value (e.g. `null`) – the state is then
+     * neither created nor updated. The display name comes from the language files (`src/i18n`), the key is the id.
      */
     read(status: ChargerStatus): ioBroker.StateValue | undefined;
     /** present if the state can be written */
@@ -42,17 +33,17 @@ export interface Datapoint {
     };
 }
 
-/** Channels the datapoints are grouped in */
-export const CHANNELS: Record<string, Translated> = {
-    info: { en: 'Device information', de: 'Geräteinformation' },
-    car: { en: 'Vehicle and cable', de: 'Fahrzeug und Kabel' },
-    charging: { en: 'Charging control', de: 'Ladesteuerung' },
-    energy: { en: 'Electrical measurements', de: 'Elektrische Messwerte' },
-    temperature: { en: 'Temperatures', de: 'Temperaturen' },
-    pv: { en: 'PV surplus function of the wallbox', de: 'PV-Überschussfunktion der Wallbox' },
-    settings: { en: 'Device settings', de: 'Geräteeinstellungen' },
-    raw: { en: 'Additional API keys (unprocessed)', de: 'Zusätzliche API-Schlüssel (unverarbeitet)' },
-};
+/** Channels the datapoints are grouped in; their names come from the language files */
+export const CHANNELS: readonly string[] = [
+    'info',
+    'car',
+    'charging',
+    'energy',
+    'temperature',
+    'pv',
+    'settings',
+    'raw',
+];
 
 // --- value lists from the official API key documentation ---------------------------------------
 
@@ -153,7 +144,7 @@ function numberOf(key: string, digits = 0, scale = 1): Datapoint['read'] {
             return undefined;
         }
         const value = status[key];
-        return typeof value === 'number' && Number.isFinite(value) ? round(value * scale, digits) : null;
+        return typeof value === 'number' && Number.isFinite(value) ? round(value * scale, digits) : undefined;
     };
 }
 
@@ -163,7 +154,7 @@ function booleanOf(key: string): Datapoint['read'] {
             return undefined;
         }
         const value = status[key];
-        return typeof value === 'boolean' ? value : null;
+        return typeof value === 'boolean' ? value : undefined;
     };
 }
 
@@ -173,7 +164,7 @@ function stringOf(key: string): Datapoint['read'] {
             return undefined;
         }
         const value = status[key];
-        return typeof value === 'string' ? value : null;
+        return typeof value === 'string' ? value : undefined;
     };
 }
 
@@ -191,7 +182,7 @@ function elementOf(key: string, index: number, digits: number): Datapoint['read'
             return undefined;
         }
         const value: unknown = list[index];
-        return typeof value === 'number' && Number.isFinite(value) ? round(value, digits) : null;
+        return typeof value === 'number' && Number.isFinite(value) ? round(value, digits) : undefined;
     };
 }
 
@@ -209,11 +200,11 @@ function switchedPhases(): Datapoint['read'] {
         }
         const list = status.pha;
         if (!Array.isArray(list) || list.length < 3) {
-            return null;
+            return undefined;
         }
         const towardsCar: unknown[] = list.slice(0, 3);
         if (!towardsCar.every(value => typeof value === 'boolean')) {
-            return null;
+            return undefined;
         }
         return towardsCar.filter(Boolean).length;
     };
@@ -292,7 +283,6 @@ const PHASES = ['L1', 'L2', 'L3'] as const;
  *
  * @param idPrefix state id without the phase suffix
  * @param offset position of L1 in `nrg`
- * @param name display name without the phase
  * @param role ioBroker role
  * @param unit unit of the value
  * @param digits decimals to keep
@@ -300,7 +290,6 @@ const PHASES = ['L1', 'L2', 'L3'] as const;
 function perPhase(
     idPrefix: string,
     offset: number,
-    name: Translated,
     role: string,
     unit: string | undefined,
     digits: number,
@@ -308,7 +297,6 @@ function perPhase(
     return PHASES.map((phase, index) => ({
         id: `${idPrefix}${phase}`,
         keys: ['nrg'],
-        name: { en: `${name.en} ${phase}`, de: `${name.de} ${phase}` },
         type: 'number',
         role,
         unit,
@@ -328,7 +316,6 @@ export const DATAPOINTS: readonly Datapoint[] = [
     {
         id: 'info.serial',
         keys: ['sse'],
-        name: { en: 'Serial number', de: 'Seriennummer' },
         type: 'string',
         role: 'info.serial',
         read: stringOf('sse'),
@@ -336,7 +323,6 @@ export const DATAPOINTS: readonly Datapoint[] = [
     {
         id: 'info.model',
         keys: ['typ'],
-        name: { en: 'Device type', de: 'Gerätetyp' },
         type: 'string',
         role: 'info.model',
         read: stringOf('typ'),
@@ -344,7 +330,6 @@ export const DATAPOINTS: readonly Datapoint[] = [
     {
         id: 'info.firmware',
         keys: ['fwv'],
-        name: { en: 'Firmware version', de: 'Firmware-Version' },
         type: 'string',
         role: 'info.firmware',
         read: stringOf('fwv'),
@@ -352,7 +337,6 @@ export const DATAPOINTS: readonly Datapoint[] = [
     {
         id: 'info.variant',
         keys: ['var'],
-        name: { en: 'Variant (11 = 11 kW/16 A, 22 = 22 kW/32 A)', de: 'Variante (11 = 11 kW/16 A, 22 = 22 kW/32 A)' },
         type: 'number',
         role: 'value',
         unit: 'kW',
@@ -361,9 +345,9 @@ export const DATAPOINTS: readonly Datapoint[] = [
     {
         id: 'info.friendlyName',
         keys: ['fna'],
-        name: { en: 'Device name', de: 'Gerätename' },
         type: 'string',
-        role: 'info.name',
+        // writable, so not an info.* role
+        role: 'text',
         read: stringOf('fna'),
         write: {
             key: 'fna',
@@ -378,16 +362,14 @@ export const DATAPOINTS: readonly Datapoint[] = [
     {
         id: 'info.rssi',
         keys: ['rssi'],
-        name: { en: 'WiFi signal strength', de: 'WLAN-Signalstärke' },
         type: 'number',
-        role: 'value',
+        role: 'value.rssi',
         unit: 'dBm',
         read: numberOf('rssi'),
     },
     {
         id: 'info.uptime',
         keys: ['rbt'],
-        name: { en: 'Time since boot', de: 'Laufzeit seit dem Start' },
         type: 'number',
         role: 'value',
         unit: 'min',
@@ -399,7 +381,6 @@ export const DATAPOINTS: readonly Datapoint[] = [
     {
         id: 'car.state',
         keys: ['car'],
-        name: { en: 'Car state', de: 'Fahrzeugstatus' },
         type: 'number',
         role: 'value',
         states: CAR_STATES,
@@ -408,7 +389,6 @@ export const DATAPOINTS: readonly Datapoint[] = [
     {
         id: 'car.connected',
         keys: ['car'],
-        name: { en: 'Car is plugged in', de: 'Fahrzeug ist angesteckt' },
         type: 'boolean',
         role: 'indicator',
         read: (status: ChargerStatus): ioBroker.StateValue | undefined => {
@@ -416,13 +396,12 @@ export const DATAPOINTS: readonly Datapoint[] = [
                 return undefined;
             }
             const car = status.car;
-            return typeof car === 'number' ? car >= 2 && car <= 4 : null;
+            return typeof car === 'number' ? car >= 2 && car <= 4 : undefined;
         },
     },
     {
         id: 'car.chargedEnergy',
         keys: ['wh'],
-        name: { en: 'Energy since the car was plugged in', de: 'Geladene Energie seit dem Anstecken' },
         type: 'number',
         role: 'value.energy',
         unit: 'Wh',
@@ -431,7 +410,6 @@ export const DATAPOINTS: readonly Datapoint[] = [
     {
         id: 'car.cableCurrentLimit',
         keys: ['cbl'],
-        name: { en: 'Current limit of the cable', de: 'Strombegrenzung des Kabels' },
         type: 'number',
         role: 'value.current',
         unit: 'A',
@@ -440,7 +418,6 @@ export const DATAPOINTS: readonly Datapoint[] = [
     {
         id: 'car.cableLock',
         keys: ['cus'],
-        name: { en: 'Cable lock state', de: 'Zustand der Kabelverriegelung' },
         type: 'number',
         role: 'value',
         states: CABLE_LOCK_STATES,
@@ -451,7 +428,6 @@ export const DATAPOINTS: readonly Datapoint[] = [
     {
         id: 'charging.allowed',
         keys: ['alw'],
-        name: { en: 'Car may charge right now', de: 'Fahrzeug darf gerade laden' },
         type: 'boolean',
         role: 'indicator',
         read: booleanOf('alw'),
@@ -459,7 +435,6 @@ export const DATAPOINTS: readonly Datapoint[] = [
     {
         id: 'charging.reason',
         keys: ['modelStatus'],
-        name: { en: 'Reason why charging is allowed or not', de: 'Grund, warum geladen wird oder nicht' },
         type: 'number',
         role: 'value',
         states: REASONS,
@@ -468,7 +443,6 @@ export const DATAPOINTS: readonly Datapoint[] = [
     {
         id: 'charging.forceState',
         keys: ['frc'],
-        name: { en: 'Force state', de: 'Erzwungener Zustand' },
         type: 'number',
         role: 'level',
         states: FORCE_STATES,
@@ -478,7 +452,6 @@ export const DATAPOINTS: readonly Datapoint[] = [
     {
         id: 'charging.current',
         keys: ['amp'],
-        name: { en: 'Requested charging current', de: 'Angeforderter Ladestrom' },
         type: 'number',
         role: 'level.current',
         unit: 'A',
@@ -490,7 +463,6 @@ export const DATAPOINTS: readonly Datapoint[] = [
     {
         id: 'charging.currentLimit',
         keys: ['ama'],
-        name: { en: 'Upper limit for the charging current', de: 'Obergrenze für den Ladestrom' },
         type: 'number',
         role: 'level.current',
         unit: 'A',
@@ -502,7 +474,6 @@ export const DATAPOINTS: readonly Datapoint[] = [
     {
         id: 'charging.allowedCurrent',
         keys: ['acu'],
-        name: { en: 'Current the car may draw right now', de: 'Strom, den das Fahrzeug gerade ziehen darf' },
         type: 'number',
         role: 'value.current',
         unit: 'A',
@@ -511,7 +482,6 @@ export const DATAPOINTS: readonly Datapoint[] = [
     {
         id: 'charging.phaseSwitchMode',
         keys: ['psm'],
-        name: { en: 'Phase switch mode', de: 'Phasenumschaltung' },
         type: 'number',
         role: 'level',
         states: PHASE_SWITCH_MODES,
@@ -521,10 +491,6 @@ export const DATAPOINTS: readonly Datapoint[] = [
     {
         id: 'charging.energyLimit',
         keys: ['dwo'],
-        name: {
-            en: 'Energy limit per charging session (0 = none)',
-            de: 'Energielimit je Ladevorgang (0 = keines)',
-        },
         type: 'number',
         role: 'level',
         unit: 'Wh',
@@ -542,7 +508,6 @@ export const DATAPOINTS: readonly Datapoint[] = [
     {
         id: 'charging.logicMode',
         keys: ['lmo'],
-        name: { en: 'Charging mode', de: 'Lademodus' },
         type: 'number',
         role: 'level',
         states: LOGIC_MODES,
@@ -552,7 +517,6 @@ export const DATAPOINTS: readonly Datapoint[] = [
     {
         id: 'charging.error',
         keys: ['err'],
-        name: { en: 'Error', de: 'Fehler' },
         type: 'number',
         role: 'value',
         states: ERRORS,
@@ -563,19 +527,17 @@ export const DATAPOINTS: readonly Datapoint[] = [
     {
         id: 'energy.power',
         keys: ['nrg'],
-        name: { en: 'Charging power', de: 'Ladeleistung' },
         type: 'number',
         role: 'value.power',
         unit: 'W',
         read: elementOf('nrg', 11, 0),
     },
-    ...perPhase('energy.power', 7, { en: 'Power', de: 'Leistung' }, 'value.power', 'W', 0),
-    ...perPhase('energy.voltage', 0, { en: 'Voltage', de: 'Spannung' }, 'value.voltage', 'V', 0),
-    ...perPhase('energy.current', 4, { en: 'Current', de: 'Strom' }, 'value.current', 'A', 1),
+    ...perPhase('energy.power', 7, 'value.power', 'W', 0),
+    ...perPhase('energy.voltage', 0, 'value.voltage', 'V', 0),
+    ...perPhase('energy.current', 4, 'value.current', 'A', 1),
     {
         id: 'energy.total',
         keys: ['eto'],
-        name: { en: 'Total energy charged', de: 'Insgesamt geladene Energie' },
         type: 'number',
         role: 'value.energy',
         unit: 'Wh',
@@ -584,7 +546,6 @@ export const DATAPOINTS: readonly Datapoint[] = [
     {
         id: 'energy.frequency',
         keys: ['fhz'],
-        name: { en: 'Grid frequency', de: 'Netzfrequenz' },
         type: 'number',
         role: 'value.frequency',
         unit: 'Hz',
@@ -593,7 +554,6 @@ export const DATAPOINTS: readonly Datapoint[] = [
     {
         id: 'energy.phases',
         keys: ['pha'],
-        name: { en: 'Number of phases switched to the car', de: 'Anzahl zum Fahrzeug geschalteter Phasen' },
         type: 'number',
         role: 'value',
         min: 0,
@@ -605,7 +565,6 @@ export const DATAPOINTS: readonly Datapoint[] = [
     {
         id: 'temperature.sensor1',
         keys: ['tma'],
-        name: { en: 'Temperature sensor 1', de: 'Temperatursensor 1' },
         type: 'number',
         role: 'value.temperature',
         unit: '°C',
@@ -614,7 +573,6 @@ export const DATAPOINTS: readonly Datapoint[] = [
     {
         id: 'temperature.sensor2',
         keys: ['tma'],
-        name: { en: 'Temperature sensor 2', de: 'Temperatursensor 2' },
         type: 'number',
         role: 'value.temperature',
         unit: '°C',
@@ -625,7 +583,6 @@ export const DATAPOINTS: readonly Datapoint[] = [
     {
         id: 'pv.useSurplus',
         keys: ['fup'],
-        name: { en: 'Use PV surplus (function of the wallbox)', de: 'PV-Überschuss nutzen (Funktion der Wallbox)' },
         type: 'boolean',
         role: 'switch',
         read: booleanOf('fup'),
@@ -634,7 +591,6 @@ export const DATAPOINTS: readonly Datapoint[] = [
     {
         id: 'pv.startingPower',
         keys: ['fst'],
-        name: { en: 'Starting power for surplus charging', de: 'Startleistung für das Überschussladen' },
         type: 'number',
         role: 'level',
         unit: 'W',
@@ -645,7 +601,6 @@ export const DATAPOINTS: readonly Datapoint[] = [
     {
         id: 'pv.gridPower',
         keys: ['pgrid'],
-        name: { en: 'Grid power known to the wallbox', de: 'Der Wallbox bekannte Netzleistung' },
         type: 'number',
         role: 'value.power',
         unit: 'W',
@@ -654,7 +609,6 @@ export const DATAPOINTS: readonly Datapoint[] = [
     {
         id: 'pv.pvPower',
         keys: ['ppv'],
-        name: { en: 'PV power known to the wallbox', de: 'Der Wallbox bekannte PV-Leistung' },
         type: 'number',
         role: 'value.power',
         unit: 'W',
@@ -663,7 +617,6 @@ export const DATAPOINTS: readonly Datapoint[] = [
     {
         id: 'pv.batteryPower',
         keys: ['pakku'],
-        name: { en: 'Battery power known to the wallbox', de: 'Der Wallbox bekannte Batterieleistung' },
         type: 'number',
         role: 'value.power',
         unit: 'W',
@@ -674,7 +627,6 @@ export const DATAPOINTS: readonly Datapoint[] = [
     {
         id: 'settings.accessControl',
         keys: ['acs'],
-        name: { en: 'Access control', de: 'Zugangskontrolle' },
         type: 'number',
         role: 'level',
         states: ACCESS_CONTROL,
@@ -684,7 +636,6 @@ export const DATAPOINTS: readonly Datapoint[] = [
     {
         id: 'settings.cableUnlock',
         keys: ['ust'],
-        name: { en: 'Cable unlock behaviour', de: 'Verhalten der Kabelentriegelung' },
         type: 'number',
         role: 'level',
         states: UNLOCK_SETTINGS,
@@ -694,7 +645,6 @@ export const DATAPOINTS: readonly Datapoint[] = [
     {
         id: 'settings.ledBrightness',
         keys: ['lbr'],
-        name: { en: 'LED brightness', de: 'LED-Helligkeit' },
         type: 'number',
         role: 'level.dimmer',
         min: 0,
@@ -705,7 +655,6 @@ export const DATAPOINTS: readonly Datapoint[] = [
     {
         id: 'settings.minChargingCurrent',
         keys: ['mca'],
-        name: { en: 'Minimum charging current', de: 'Minimaler Ladestrom' },
         type: 'number',
         role: 'level.current',
         unit: 'A',
@@ -717,7 +666,6 @@ export const DATAPOINTS: readonly Datapoint[] = [
     {
         id: 'settings.awattarMaxPrice',
         keys: ['awp'],
-        name: { en: 'Maximum price in Eco mode', de: 'Höchstpreis im Eco-Modus' },
         type: 'number',
         role: 'level',
         unit: 'ct',
@@ -727,7 +675,6 @@ export const DATAPOINTS: readonly Datapoint[] = [
     {
         id: 'settings.automaticStopEnergy',
         keys: ['ate'],
-        name: { en: 'Daily Trip: energy to charge', de: 'Daily Trip: zu ladende Energie' },
         type: 'number',
         role: 'level',
         unit: 'Wh',
@@ -738,10 +685,6 @@ export const DATAPOINTS: readonly Datapoint[] = [
     {
         id: 'settings.automaticStopTime',
         keys: ['att'],
-        name: {
-            en: 'Daily Trip: ready at (seconds since midnight)',
-            de: 'Daily Trip: fertig um (Sekunden seit Mitternacht)',
-        },
         type: 'number',
         role: 'level',
         unit: 's',
@@ -764,6 +707,8 @@ export function collectKeys(datapoints: readonly Datapoint[], extraKeys: readonl
 
 /**
  * Splits the user's list of additional API keys and drops everything that is not a plausible key.
+ * Keys that differ only in upper/lower case are kept once (the first spelling), because state ids must be
+ * unique regardless of case.
  *
  * @param input comma- or space-separated keys
  */
@@ -771,8 +716,13 @@ export function parseExtraKeys(input: unknown): string[] {
     if (typeof input !== 'string') {
         return [];
     }
-    const keys = input.split(/[\s,;]+/).filter(key => /^[A-Za-z][A-Za-z0-9_]{0,40}$/.test(key));
-    return [...new Set(keys)];
+    const byLowerCase = new Map<string, string>();
+    for (const key of input.split(/[\s,;]+/)) {
+        if (/^[A-Za-z][A-Za-z0-9_]{0,40}$/.test(key) && !byLowerCase.has(key.toLowerCase())) {
+            byLowerCase.set(key.toLowerCase(), key);
+        }
+    }
+    return [...byLowerCase.values()];
 }
 
 /**

@@ -112,7 +112,16 @@
       "common": {
         "name": {
           "en": "Information",
-          "de": "Information"
+          "de": "Information",
+          "ru": "Информация",
+          "pt": "Informação",
+          "nl": "Informatie",
+          "fr": "Information",
+          "it": "Informazioni",
+          "es": "Información",
+          "pl": "Informacja",
+          "uk": "Інформація",
+          "zh-cn": "信息"
         }
       },
       "native": {}
@@ -124,7 +133,16 @@
         "role": "indicator.connected",
         "name": {
           "en": "At least one wallbox is reachable",
-          "de": "Mindestens eine Wallbox ist erreichbar"
+          "de": "Mindestens eine Wallbox ist erreichbar",
+          "ru": "Доступен хотя бы один настенный ящик.",
+          "pt": "Pelo menos uma wallbox está acessível",
+          "nl": "Er is minimaal één wallbox bereikbaar",
+          "fr": "Au moins une wallbox est accessible",
+          "it": "Almeno una Wallbox è raggiungibile",
+          "es": "Se puede acceder al menos a una Wallbox",
+          "pl": "Dostępny jest co najmniej jeden wallbox",
+          "uk": "Принаймні одна стінна коробка доступна",
+          "zh-cn": "至少有一个壁箱可触及"
         },
         "type": "boolean",
         "read": true,

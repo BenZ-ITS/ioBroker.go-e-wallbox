@@ -47,7 +47,7 @@
     "test": "npm run test:unit && npm run test:package",
     "release": "release-script",
     "release:check": "npm run build && node scripts/check-release.mjs",
-    "translate": "translate-adapter"
+    "translate": "translate-adapter translate && translate-adapter translate -a src -b src/i18n/en.json"
   },
   "dependencies": {
     "@iobroker/adapter-core": "^3.4.3"
