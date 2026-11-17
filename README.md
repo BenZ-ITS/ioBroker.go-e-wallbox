@@ -149,7 +149,7 @@ Architecture, conventions and the release procedure are described in [docs/DEVEL
     Placeholder for the next version (at the beginning of the line):
     ### **WORK IN PROGRESS**
 -->
-### **WORK IN PROGRESS**
+### 0.1.4 (2026-11-17)
 
 - State and channel names in all languages of ioBroker
 - States are no longer set to `null` when the wallbox reports no value; they keep their last value and are only
